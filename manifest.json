@@ -1,0 +1,8 @@
+{
+  "build_number": 477,
+  "commit": "c256cc216f0935d7323ee21f450abb22d125329f",
+  "built_at": "2026-10-02T23:28:47Z",
+  "apk_url": "https://raw.githubusercontent.com/baboo-balan-1173535/ropu-mapi/main/RopuMapi.apk",
+  "commit_short": "c256cc2",
+  "release_notes": "docs: ledger #142 \u2014 build #476 field test, refresh status header"
+}
