@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rōpū Mapi privacy policy</title>
+<!-- Source of truth: distribution/privacy.html in the private TripMap repo. CI copies it to the
+     public ropu-mapi repo on every build (build-android-apk.yml step 12), so edit it there, not on
+     ropu-mapi. Keep it in step with the in-app text (apps/server/public/js/36-terms-and-credits.js).
+     Written from what the code does (ledger #192); not reviewed by a lawyer. -->
+<style>
+  :root { --bg: #ffffff; --text: #1f2933; --muted: #52606d; --rule: #d9e2ec; --link: #0b5cad; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #111827; --text: #e5e7eb; --muted: #9ca3af; --rule: #374151; --link: #7cb7f5; }
+  }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 720px; margin: 0 auto; padding: 32px 16px 64px; }
+  h1 { font-size: 1.7rem; margin: 0 0 4px; }
+  h2 { font-size: 1.15rem; margin: 32px 0 8px; padding-top: 16px; border-top: 1px solid var(--rule); }
+  p, li { margin: 8px 0; }
+  .muted { color: var(--muted); }
+  a { color: var(--link); }
+  table { border-collapse: collapse; width: 100%; font-size: 0.95rem; }
+  th, td { text-align: left; vertical-align: top; padding: 8px 6px; border-bottom: 1px solid var(--rule); }
+  th { font-weight: 600; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Rōpū Mapi privacy policy</h1>
+  <p class="muted">Last updated 11 October 2026. Applies to the Rōpū Mapi app for Android installed from Google Play.</p>
+
+  <p>Rōpū Mapi is a free navigation app for people travelling together. It has no accounts, no advertising and no analytics or tracking tools. This page explains what the app does with your information, who it goes to and how long it is kept.</p>
+
+  <h2>Your location</h2>
+  <p>The app uses your phone's precise location to show where you are, plan routes and give turn-by-turn directions. When you start navigating, it keeps using your location while navigation runs, including when the app is in the background or the screen is off. Android shows a notification for as long as this happens. It stops when navigation ends.</p>
+
+  <h2>What stays on your phone</h2>
+  <ul>
+    <li>Your settings, your last known location (so the map opens where you are) and your last eight destinations.</li>
+    <li>Map files for the areas you have looked at and for routes you plan, so the map keeps working where there is no signal. They take up to the size you choose under Menu → Map &amp; Discovery (100, 250 or 500 MB); the oldest are removed first, and you can clear them there at any time.</li>
+    <li>The route of your last trip, for up to three days, so the same trip can be planned without signal.</li>
+    <li>Speeds measured on your own drives, used to improve travel time estimates.</li>
+    <li>A diagnostic log of app events, which includes your positions during drives. It keeps roughly the last 300 entries and is not sent anywhere by this version of the app.</li>
+  </ul>
+  <p>Uninstalling the app, or clearing its storage in Android settings, deletes all of this.</p>
+
+  <h2>Problem reports</h2>
+  <p>If you choose Menu → Report a problem, the app opens your email app (or another app you pick) with your note and the app's diagnostic log attached, addressed to the contact below. The log includes your positions during recent drives. Nothing is sent unless you send it. We use reports only to find and fix problems, and delete them once they are dealt with.</p>
+
+  <h2>Online services the app uses</h2>
+  <p>To search, plan routes, draw the map and show road and weather information, the app sends the details each request needs to these services. They receive your phone's internet (IP) address, as with any online request, and their own privacy policies apply. We don't receive copies of these requests.</p>
+  <table>
+    <tr><th>What for</th><th>Service</th><th>What is sent</th></tr>
+    <tr><td>Routes and road checks</td><td>Project OSRM demo server; FOSSGIS e.V. routing servers (OSRM, Valhalla)</td><td>Your start point, stops and destination; your direction of travel when re-routing; the shape of a route</td></tr>
+    <tr><td>Search</td><td>Photon (komoot); Nominatim (OpenStreetMap Foundation)</td><td>What you type, and the map position used to rank results</td></tr>
+    <tr><td>Place names and outlines</td><td>Nominatim (OpenStreetMap Foundation)</td><td>A position, or the map reference of a place you picked (to find its outline and entrances)</td></tr>
+    <tr><td>Places along a route, and entrances of large places</td><td>Overpass API servers</td><td>The area around your route or destination</td></tr>
+    <tr><td>Weather</td><td>Open-Meteo</td><td>A position</td></tr>
+    <tr><td>Map images</td><td>OpenFreeMap; Esri or OpenTopoMap if you choose the satellite or terrain map</td><td>The parts of the map you look at, and the area along a route you plan (fetched ahead so it works without signal)</td></tr>
+    <tr><td>Road closures and roadworks</td><td>NZ Transport Agency Waka Kotahi</td><td>Nothing about you: the app downloads the whole state highway list</td></tr>
+  </table>
+  <p>Some screens have links that open Google Maps or a web search in another app. Those apps' policies apply once you tap them.</p>
+
+  <h2>Convoys</h2>
+  <p>Only when you create or join a convoy, the app sends your callsign (the name you choose), your live position, speed and direction, the convoy's name, route and destination name, and any pit-stop proposals and votes to our convoy server, which passes them on to the other members of that convoy. The server is hosted by Render.</p>
+  <ul>
+    <li>The server keeps convoy information in memory only, with no database. For each member it holds the latest position and about the last four minutes of positions, which it needs to tell the others when someone has stopped.</li>
+    <li>A member's information is removed 15 seconds after they leave or lose connection. A convoy with nobody left in it is deleted at the server's next hourly clean-up.</li>
+    <li>The server's log records callsigns, convoy codes and convoy names when people create, join and leave a convoy, the names of proposed pit stops, and the internet address of a device that makes too many wrong attempts to join a convoy. It does not log positions. Render keeps these logs for a limited time under its own policy.</li>
+  </ul>
+  <p>Other members of your convoy see your callsign and position while you are in it. Only share a convoy code with people you want to travel with.</p>
+
+  <h2>What we don't do</h2>
+  <ul>
+    <li>We don't sell or rent your information, and the app shows no advertising.</li>
+    <li>We don't build a profile of you or track you across other apps.</li>
+    <li>The app has no account, so we don't hold your name, email address or phone number.</li>
+    <li>This version of the app doesn't use your camera, microphone, contacts or photos.</li>
+  </ul>
+
+  <h2>Your rights</h2>
+  <p>Under New Zealand's Privacy Act 2020 you can ask what personal information we hold about you and ask for it to be corrected or deleted. Most of your information never reaches us, and convoy information is held only for a short time, but please get in touch with any question or request.</p>
+
+  <h2>Changes</h2>
+  <p>If this policy changes, the date at the top changes, and the app asks you to accept its updated terms.</p>
+
+  <h2>Contact</h2>
+  <p id="contact">For privacy questions, data requests and problem reports, email <a href="mailto:baboomasind@gmail.com">baboomasind@gmail.com</a>.</p>
+</main>
+</body>
+</html>

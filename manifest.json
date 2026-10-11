@@ -1,0 +1,8 @@
+{
+  "build_number": 520,
+  "commit": "89077d136987f338cc65a0aa3fa48b4972805df5",
+  "built_at": "2026-10-11T01:40:24Z",
+  "apk_url": "https://raw.githubusercontent.com/baboo-balan-1173535/ropu-mapi/main/RopuMapi.apk",
+  "commit_short": "89077d1",
+  "release_notes": "docs(status): ledger #211 \u2014 store graphics, map blank on storage failure and route lost on day/night switch fixed"
+}
