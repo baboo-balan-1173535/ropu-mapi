@@ -1,0 +1,8 @@
+{
+  "build_number": 526,
+  "commit": "e88b429452735fcea1e2a224e7776b29493f20ff",
+  "built_at": "2026-10-12T21:29:25Z",
+  "apk_url": "https://raw.githubusercontent.com/baboo-balan-1173535/ropu-mapi/main/RopuMapi.apk",
+  "commit_short": "e88b429",
+  "release_notes": "feat(i18n): Language row labelled in both languages (\ud83c\udf10 Language \u00b7 \u8a9e\u8a00) and added to the main menu, so it can be found whatever the current language (ledger #226)"
+}
