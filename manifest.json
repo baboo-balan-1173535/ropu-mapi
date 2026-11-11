@@ -1,0 +1,8 @@
+{
+  "build_number": 541,
+  "commit": "0b6bd74406d38eecad969c2e57c7541e6f71385a",
+  "built_at": "2026-11-11T09:13:00Z",
+  "apk_url": "https://raw.githubusercontent.com/baboo-balan-1173535/ropu-mapi/main/RopuMapi.apk",
+  "commit_short": "0b6bd74",
+  "release_notes": "Merge pull request #11 from baboo-balan-1173535/fix/keyboard-type-in-tapped-field"
+}
