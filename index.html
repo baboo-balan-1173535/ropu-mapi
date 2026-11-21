@@ -1,0 +1,641 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <title>Group Travel App: Keep Every Car Together on Road Trips — Rōpū Mapi</title>
+  <meta name="description" content="Travelling with friends or family in more than one car? Rōpū Mapi is a free Android app that keeps every car on the same route. Share a 6-letter code, see where everyone is, and get a heads-up when a car stops or falls behind. No account, no ads.">
+  <meta name="theme-color" content="#0B0F18" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#F8F8FC" media="(prefers-color-scheme: light)">
+  <link rel="canonical" href="https://aadized.com/">
+  <link rel="alternate" hreflang="en" href="https://aadized.com/">
+  <link rel="alternate" hreflang="zh-Hant-TW" href="https://aadized.com/zh-tw/">
+  <link rel="alternate" hreflang="x-default" href="https://aadized.com/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="en_NZ">
+  <meta property="og:site_name" content="Rōpū Mapi by Aadized">
+  <meta property="og:title" content="Rōpū Mapi: travel together in more than one car">
+  <meta property="og:description" content="One person shares a 6-letter code and every car follows the same route with spoken directions. See where everyone is and vote on stops. Free on Android, no account, no ads.">
+  <meta property="og:url" content="https://aadized.com/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://aadized.com/assets/og-image.png">
+  <meta name="twitter:title" content="Rōpū Mapi: travel together in more than one car">
+  <meta name="twitter:description" content="A free Android app for group road trips. Every car on the same route, everyone on the map, and alerts when someone stops or falls behind.">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/assets/aadized-favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/aadized-apple-touch-icon.png">
+  <meta property="og:image" content="https://aadized.com/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Rōpū Mapi app icon with the line: group travel for road trips">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,400..800&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,500,1,0&icon_names=android,block,construction,dark_mode,directions_car,groups,local_gas_station,person_off,record_voice_over,route,share,signal_cellular_off&display=block">
+  <link rel="stylesheet" href="styles.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://aadized.com/#org",
+        "name": "Aadized",
+        "url": "https://aadized.com/",
+        "logo": "https://aadized.com/assets/aadized-icon-512.png",
+        "email": "support@aadized.com",
+        "areaServed": "NZ",
+        "sameAs": ["https://play.google.com/store/apps/developer?id=Aadized"]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://aadized.com/#website",
+        "name": "Rōpū Mapi",
+        "url": "https://aadized.com/",
+        "inLanguage": "en-NZ",
+        "publisher": { "@id": "https://aadized.com/#org" }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://aadized.com/#app",
+        "name": "Rōpū Mapi",
+        "alternateName": ["Ropu Mapi", "Rōpū Mapi Group Travel", "Rōpū Mapi Convoy Navigation"],
+        "applicationCategory": "NavigationApplication",
+        "operatingSystem": "Android 7.0+",
+        "datePublished": "2026-11-19",
+        "image": "https://aadized.com/assets/icon-512.png",
+        "url": "https://aadized.com/",
+        "downloadUrl": "https://play.google.com/store/apps/details?id=app.ropumapi.convoy",
+        "installUrl": "https://play.google.com/store/apps/details?id=app.ropumapi.convoy",
+        "description": "Rōpū Mapi is a free Android group travel and turn-by-turn navigation app built in New Zealand for people who travel together in more than one car. One person shares a 6-letter code so every car follows the same route, sees where the others are, gets alerts when someone stops or falls behind, and votes on stops. No account, no advertising, no tracking.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "NZD"
+        },
+        "author": { "@id": "https://aadized.com/#org" },
+        "publisher": { "@id": "https://aadized.com/#org" },
+        "featureList": [
+          "Group travel (convoy mode) with a 6-letter join code",
+          "See every car in the group on the map with its speed and distance behind",
+          "Alerts when a car falls behind, stops, or takes a wrong turn",
+          "Suggest a stop and let the group vote on it",
+          "Spoken turn-by-turn voice directions with four alert levels",
+          "NZ Transport Agency Waka Kotahi state highway road closures and roadworks",
+          "Offline saved route maps with user-controlled storage limits",
+          "Driving, walking, and cycling routes with night map colours",
+          "No account required, no advertising, no tracking, HTTPS-only"
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is there a free app to keep several cars together on a road trip?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Rōpū Mapi is a free Android app made for group travel in more than one car. One person starts a group trip and shares a 6-letter code with the other cars. Everyone follows the same route with spoken directions, sees where each car is and how far behind it is, and gets an alert if someone stops or falls behind. The app calls this convoy mode."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does everyone in the group need an account or a phone number?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Rōpū Mapi has no accounts, passwords or phone-number sign-ups. You type the 6-letter code and a nickname for the map. Positions are kept in server memory only while the group trip is running, and yours is removed 15 seconds after you leave."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does Rōpū Mapi work without mobile signal?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes for directions. When you plan a route, Rōpū Mapi saves the map for that route on your phone, so turn-by-turn directions keep working where there is no mobile coverage. You choose how much space it uses (100, 250 or 500 MB) and can clear it at any time. Seeing the other cars live needs mobile data."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can anyone in the group suggest a fuel or food stop?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Anyone in the group can look up fuel, EV charging, food and rest stops along the route, suggest one, and the others vote yes or no from the driving screen."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which phones and countries is Rōpū Mapi available on?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Rōpū Mapi is available free on Google Play for Android 7.0 and up. It is currently published in New Zealand and Taiwan. There is no iOS version at this stage."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand-link" href="/">
+        <img class="brand-logo" src="assets/logo-80.png" width="40" height="40" alt="Rōpū Mapi icon">
+        <span class="brand-text">
+          <span class="brand-name">Rōpū Mapi</span>
+          <span class="brand-by">by Aadized</span>
+        </span>
+      </a>
+
+      <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="primary-nav">
+        Menu
+      </button>
+
+      <nav class="nav-links" id="primary-nav" data-nav-links aria-label="Primary navigation">
+        <a href="convoy-mode.html">How it works</a>
+        <a href="group-road-trips.html">Group trips</a>
+        <a href="how-to-drive-in-convoy.html">Driving tips</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="/zh-tw/" lang="zh-Hant" hreflang="zh-Hant">中文</a>
+        <a class="btn btn-primary btn-sm" href="https://play.google.com/store/apps/details?id=app.ropumapi.convoy" target="_blank" rel="noopener noreferrer">
+          Get on Google Play
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow">
+            <span class="eyebrow-dot" aria-hidden="true"></span>
+            Live on Google Play &middot; New Zealand &amp; Taiwan
+          </div>
+
+          <h1>Travelling in more than one car? <span class="accent">Keep everyone together.</span></h1>
+
+          <p class="hero-lead">
+            Rōpū Mapi is a free group travel app for road trips with friends and family. One person shares a 6-letter code, and every car follows the same route with spoken directions. You can see where everyone is, and the app tells you when a car stops or falls behind. No more "just follow me". Built in New Zealand.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="https://play.google.com/store/apps/details?id=app.ropumapi.convoy" target="_blank" rel="noopener noreferrer">
+              Install on Google Play
+            </a>
+            <a class="btn btn-secondary" href="convoy-mode.html">
+              See how it works
+            </a>
+          </div>
+
+          <ul class="trust-strip" aria-label="Key app guarantees">
+            <li><span class="msr" aria-hidden="true">android</span>Free &middot; Android 7.0+</li>
+            <li><span class="msr" aria-hidden="true">person_off</span>No account required</li>
+            <li><span class="msr" aria-hidden="true">block</span>No ads or tracking</li>
+            <li><span class="msr" aria-hidden="true">signal_cellular_off</span>Works without signal</li>
+          </ul>
+        </div>
+
+        <!-- Interactive HUD Preview -->
+        <div class="hud-showcase" aria-label="Interactive preview of the Rōpū Mapi driving interface">
+          <div class="hud-tabs" role="tablist" aria-label="Select a driving screen preview">
+            <button class="hud-tab" role="tab" id="tab-solo" aria-controls="panel-solo" aria-selected="true" tabindex="0" type="button">Turn-by-Turn</button>
+            <button class="hud-tab" role="tab" id="tab-convoy" aria-controls="panel-convoy" aria-selected="false" tabindex="-1" type="button">Live Convoy</button>
+            <button class="hud-tab" role="tab" id="tab-alert" aria-controls="panel-alert" aria-selected="false" tabindex="-1" type="button">Gap Alert</button>
+            <button class="hud-tab" role="tab" id="tab-stops" aria-controls="panel-stops" aria-selected="false" tabindex="-1" type="button">Fuel &amp; Food</button>
+          </div>
+
+          <div class="phone-frame">
+            <div class="phone-screen" data-phone-screen>
+              <div class="reel-progress" aria-hidden="true">
+                <div class="reel-progress-bar" data-reel-progress></div>
+              </div>
+
+              <!-- Panel 1: Turn-by-Turn Solo HUD -->
+              <div class="hud-panel" id="panel-solo" role="tabpanel" aria-labelledby="tab-solo">
+                <div>
+                  <div class="mock-turn-card">
+                    <div class="mock-turn-icon" aria-hidden="true">&#8635;</div>
+                    <div>
+                      <div class="mock-turn-dist tabular" data-sim-solo-dist>180 m</div>
+                      <div class="mock-turn-action">Take 2nd exit at roundabout</div>
+                      <div class="mock-turn-street">Shands Road</div>
+                    </div>
+                  </div>
+                  <div class="mock-pills-row" style="margin-top: 8px;">
+                    <span class="mock-pill">+23&deg;C Clear Sky</span>
+                    <span class="mock-pill mock-pill-live">Live GPS</span>
+                  </div>
+                </div>
+
+                <div class="mock-map-stage">
+                  <div class="mock-route-line" aria-hidden="true"></div>
+                  <span class="mock-marker mock-marker-you">&#9650; You</span>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                  <div class="mock-speed-cluster" aria-label="Live speed and posted speed limit 60">
+                    <div class="mock-speedo tabular">
+                      <strong data-sim-solo-speed>60</strong>
+                      <span>KM/H</span>
+                    </div>
+                    <div class="mock-limit tabular">60</div>
+                  </div>
+
+                  <div class="mock-bottom-card">
+                    <div class="mock-eta-row">
+                      <div>
+                        <div class="mock-eta-time tabular">15 min</div>
+                        <div class="mock-eta-sub tabular">12.6 km &middot; 2:04 PM</div>
+                      </div>
+                      <span class="mock-pill">Spoken guidance on</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Panel 2: Live Convoy Formation -->
+              <div class="hud-panel" id="panel-convoy" role="tabpanel" aria-labelledby="tab-convoy" hidden>
+                <div>
+                  <div class="mock-turn-card">
+                    <div class="mock-turn-icon" aria-hidden="true">&#8625;</div>
+                    <div>
+                      <div class="mock-turn-dist tabular" data-sim-convoy-dist>7.0 km</div>
+                      <div class="mock-turn-action">Turn right onto</div>
+                      <div class="mock-turn-street">Christchurch Akaroa Rd</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mock-map-stage">
+                  <div class="mock-route-line" aria-hidden="true"></div>
+                  <span class="mock-marker mock-marker-you">&#9650; Lead car (You)</span>
+                  <span class="mock-marker mock-marker-peer tabular" data-sim-sam-pin>Sam &middot; +83 m</span>
+                  <span class="mock-marker mock-marker-peer tabular" data-sim-hemi-pin>Hemi &middot; +153 m</span>
+                </div>
+
+                <div class="mock-bottom-card">
+                  <div class="mock-eta-row">
+                    <div>
+                      <div class="mock-eta-time tabular">1 h 12 m</div>
+                      <div class="mock-eta-sub tabular">69.9 km &middot; 3:23 PM</div>
+                    </div>
+                    <span class="mock-pill mock-pill-live">In Formation &middot; 3 Cars</span>
+                  </div>
+                  <div class="mock-code-chip tabular">
+                    <span>CONVOY CODE</span>
+                    <span>P Q N T M B</span>
+                  </div>
+                  <div class="mock-roster tabular">
+                    <div class="mock-roster-row"><span>Lead car (You)</span><span data-sim-lead-row>48 km/h &middot; 0 m</span></div>
+                    <div class="mock-roster-row"><span>Sam</span><span data-sim-sam-row>50 km/h &middot; +83 m</span></div>
+                    <div class="mock-roster-row"><span>Hemi</span><span data-sim-hemi-row>50 km/h &middot; +153 m</span></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Panel 3: Straggler / Gap Alert -->
+              <div class="hud-panel" id="panel-alert" role="tabpanel" aria-labelledby="tab-alert" hidden>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                  <div class="mock-turn-card">
+                    <div class="mock-turn-icon" aria-hidden="true">&#8625;</div>
+                    <div>
+                      <div class="mock-turn-dist tabular">4.2 km</div>
+                      <div class="mock-turn-action">Continue straight</div>
+                      <div class="mock-turn-street">State Highway 75</div>
+                    </div>
+                  </div>
+                  <div class="mock-alert-banner">
+                    Member far behind
+                    <small data-sim-alert-text>Hemi has fallen 900 m behind the group.</small>
+                  </div>
+                </div>
+
+                <div class="mock-map-stage">
+                  <div class="mock-route-line" aria-hidden="true"></div>
+                  <span class="mock-marker mock-marker-you">&#9650; You</span>
+                  <span class="mock-marker mock-marker-peer tabular">Sam &middot; +95 m</span>
+                  <span class="mock-marker mock-marker-straggler tabular" data-sim-straggler-pin>Hemi &middot; +900 m</span>
+                </div>
+
+                <div class="mock-bottom-card">
+                  <div class="mock-eta-row">
+                    <div>
+                      <div class="mock-eta-time tabular">1 h 05 m</div>
+                      <div class="mock-eta-sub tabular">62.4 km &middot; 3:30 PM</div>
+                    </div>
+                    <span class="mock-pill" style="background: rgba(185, 28, 28, 0.35); border-color: #EF4444; color: #FECACA;">Straggler: Hemi</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Panel 4: Corridor Fuel & Food -->
+              <div class="hud-panel" id="panel-stops" role="tabpanel" aria-labelledby="tab-stops" hidden>
+                <div class="mock-pills-row">
+                  <span class="mock-pill">SH 1 / SH 73 Corridor</span>
+                  <span class="mock-pill">+23&deg;C Clear Sky</span>
+                </div>
+
+                <div class="mock-map-stage">
+                  <div class="mock-route-line" aria-hidden="true"></div>
+                  <span class="mock-marker mock-marker-fuel tabular" data-sim-fuel1-pin>Allied Fuel &middot; 7.8 km</span>
+                  <span class="mock-marker mock-marker-fuel tabular" data-sim-fuel2-pin>Fuel / EV &middot; 8.1 km</span>
+                  <span class="mock-marker mock-marker-you">&#9650; Route 1 of 3</span>
+                </div>
+
+                <div class="mock-bottom-card">
+                  <div class="mock-eta-row" style="margin-bottom: 8px;">
+                    <div>
+                      <div class="mock-eta-time tabular">24 min</div>
+                      <div class="mock-eta-sub tabular">20.7 km &middot; ETA 2:12 PM</div>
+                    </div>
+                    <span class="mock-pill">36 stops nearby</span>
+                  </div>
+                  <div class="mock-roster tabular">
+                    <div class="mock-roster-row"><span>Allied Fuel</span><span data-sim-fuel1-row>7.8 km along route</span></div>
+                    <div class="mock-roster-row"><span>Fuel / EV Charging</span><span data-sim-fuel2-row>8.1 km along route</span></div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="hud-controls">
+            <button class="hud-play-btn" type="button" data-hud-play aria-pressed="false">
+              Pause demo
+            </button>
+            <span>Animated preview of the driving screen</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How it Works -->
+    <section class="section section-alt" id="how-it-works">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-kicker">How it works</span>
+          <h2>Three steps to travel together</h2>
+          <p>
+            A normal GPS app guides one car. When you travel with family or friends in two or three cars, someone gets stuck at the lights or misses a turn, and the phone calls start. Rōpū Mapi links the cars in a few seconds, and nobody has to sign up.
+          </p>
+        </div>
+
+        <div class="steps-grid">
+          <article class="step-card">
+            <div class="step-head"><span class="msr step-icon" aria-hidden="true">route</span><span class="step-num">Step 1</span></div>
+            <h3>Plan your route</h3>
+            <p>
+              Pick where you're going. You can avoid gravel roads, and NZ state highway closures are taken into account. The map for the route is saved on your phone before you lose signal.
+            </p>
+          </article>
+
+          <article class="step-card">
+            <div class="step-head"><span class="msr step-icon" aria-hidden="true">share</span><span class="step-num">Step 2</span></div>
+            <h3>Share a 6-letter code</h3>
+            <p>
+              Tap <strong>Convoy</strong> in the app to get a code such as <strong>P Q N T M B</strong>. Send it in the family chat or read it out. The others type it in with a nickname and get the same route. No logins or phone numbers.
+            </p>
+          </article>
+
+          <article class="step-card">
+            <div class="step-head"><span class="msr step-icon" aria-hidden="true">directions_car</span><span class="step-num">Step 3</span></div>
+            <h3>Drive together</h3>
+            <p>
+              Everyone sees every car on the map, with its speed and how far behind it is. You get a heads-up if someone stops, falls behind or takes a wrong turn. Anyone can suggest a fuel or food stop and the group votes on it.
+            </p>
+          </article>
+        </div>
+
+        <p style="margin-top: 28px;">
+          More detail: <a href="convoy-mode.html">how group travel works</a>, <a href="how-to-drive-in-convoy.html">tips for driving together</a>, and <a href="group-road-trips.html">who uses it</a>.
+        </p>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="section" id="features">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-kicker">What is inside</span>
+          <h2>For group trips, and for everyday driving</h2>
+          <p>
+            Everything here is in the current Google Play release. It uses open map data and nothing is behind a paywall.
+          </p>
+        </div>
+
+        <div class="feature-grid">
+          <article class="feature-card">
+            <span class="msr feature-icon badge-violet" aria-hidden="true">groups</span>
+            <span class="feature-badge badge-violet">Group travel</span>
+            <h3>See every car, get alerts</h3>
+            <p>
+              Everyone follows the same route and sees how far apart the cars are. The group gets an alert when a car stops, drops a long way back or goes off the route. The person who started the trip can remove someone if needed.
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <span class="msr feature-icon badge-amber" aria-hidden="true">local_gas_station</span>
+            <span class="feature-badge badge-amber">Stops</span>
+            <h3>Suggest a stop, vote on it</h3>
+            <p>
+              Find fuel, EV charging, food and rest stops along your route, nearest first. Anyone in the group can suggest one and the others vote from the driving screen.
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <span class="msr feature-icon badge-blue" aria-hidden="true">record_voice_over</span>
+            <span class="feature-badge badge-blue">Directions</span>
+            <h3>Spoken turn-by-turn directions</h3>
+            <p>
+              Large, easy-to-read turn cards with spoken directions, and you choose how often it speaks. Shows your speed, plus the posted speed limit from open map data for reference.
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <span class="msr feature-icon badge-red" aria-hidden="true">construction</span>
+            <span class="feature-badge badge-red">NZ roads</span>
+            <h3>Road closures and roadworks</h3>
+            <p>
+              State highway closures and roadworks come straight from NZ Transport Agency Waka Kotahi, so your route avoids known closures and warns you about roadworks ahead. You can also avoid gravel roads.
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <span class="msr feature-icon badge-emerald" aria-hidden="true">signal_cellular_off</span>
+            <span class="feature-badge badge-emerald">No signal</span>
+            <h3>Directions keep working with no signal</h3>
+            <p>
+              The map for your route is saved on your phone, so directions keep going where mobile coverage drops out. You choose how much space it uses (100, 250 or 500 MB) and can clear it any time.
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <span class="msr feature-icon badge-teal" aria-hidden="true">dark_mode</span>
+            <span class="feature-badge badge-teal">Everyday</span>
+            <h3>Night map, walking and cycling</h3>
+            <p>
+              The map turns dark at night to cut glare. Works for walking and cycling as well as driving, and remembers recent destinations.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Privacy & Honest Expectations -->
+    <section class="section section-alt" id="privacy">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-kicker">Plain facts</span>
+          <h2>Private by design, honest about its limits</h2>
+          <p>
+            Rōpū Mapi is built to be straightforward about what it collects, where its data comes from, and what it does not do.
+          </p>
+        </div>
+
+        <div class="split-grid">
+          <div class="info-panel">
+            <h3>How your privacy is protected</h3>
+            <ul class="check-list">
+              <li><strong>No accounts, ads, or tracking:</strong> You never sign up or hand over your email address or phone number to use the app.</li>
+              <li><strong>Shared only with your group:</strong> During a group trip, your nickname and position are kept in server memory only, never in a database. They're removed 15 seconds after you leave or disconnect.</li>
+              <li><strong>HTTPS everywhere:</strong> The Google Play build uses encrypted HTTPS connections only.</li>
+              <li><strong>Deletable problem reports:</strong> If you submit an in-app problem report, you can remove every report sent from your phone with <em>Delete my reports</em>, and all reports are deleted automatically after 90 days.</li>
+            </ul>
+            <p style="margin-top: 16px;">
+              <a href="privacy.html">Read the full Privacy Policy &rarr;</a>
+            </p>
+          </div>
+
+          <div class="info-panel">
+            <h3>Important driving &amp; data notes</h3>
+            <ul class="check-list">
+              <li><strong>Posted road signs come first:</strong> Speed limits come from OpenStreetMap and open data, not the official speed limit register. Always treat them as a reference and obey posted signs.</li>
+              <li><strong>No live traffic feeds:</strong> Travel times are estimates. Road closures and roadworks come from NZTA state highway data and do not cover every local street.</li>
+              <li><strong>Drive at your own safe pace:</strong> Never speed or take risks to catch up with the group. Other cars' positions can lag when the signal is weak.</li>
+              <li><strong>Open data powered:</strong> Built on OpenStreetMap, OpenFreeMap, OSRM, Valhalla, Overture Places, Open-Meteo, and NZTA Waka Kotahi.</li>
+            </ul>
+            <p style="margin-top: 16px;">
+              <a href="terms.html">Read Terms of Use &amp; Data Credits &rarr;</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section" id="faq">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-kicker">Common questions</span>
+          <h2>Frequently asked questions</h2>
+          <p>
+            Straight answers about travelling together, driving without signal, and privacy.
+          </p>
+        </div>
+
+        <div class="faq-list">
+          <details class="faq-item" open>
+            <summary>Is there a free app to keep several cars together on a road trip?</summary>
+            <div class="faq-answer">
+              <p>
+                Yes. Rōpū Mapi is a free Android app made for group travel in more than one car. One person starts a group trip and shares a 6-letter code with the other cars. Everyone follows the same route with spoken directions, sees where each car is and how far behind it is, and gets an alert if someone stops or falls behind. The app calls this convoy mode.
+              </p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Does everyone in the group need an account or a phone number?</summary>
+            <div class="faq-answer">
+              <p>
+                No. Rōpū Mapi has no accounts, passwords or phone-number sign-ups. You type the 6-letter code and a nickname for the map. Positions are kept in server memory only while the group trip is running, and yours is removed 15 seconds after you leave.
+              </p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Does Rōpū Mapi work without mobile signal?</summary>
+            <div class="faq-answer">
+              <p>
+                Yes for directions. When you plan a route, Rōpū Mapi saves the map for that route on your phone, so turn-by-turn directions keep working where there is no mobile coverage. You choose how much space it uses (100, 250 or 500 MB) and can clear it at any time. Seeing the other cars live needs mobile data.
+              </p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Can anyone in the group suggest a fuel or food stop?</summary>
+            <div class="faq-answer">
+              <p>
+                Yes. Anyone in the group can look up fuel, EV charging, food and rest stops along the route, suggest one, and the others vote yes or no from the driving screen.
+              </p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Which phones and countries is Rōpū Mapi available on?</summary>
+            <div class="faq-answer">
+              <p>
+                Rōpū Mapi is available free on Google Play for Android 7.0 and up. It is currently published in New Zealand and Taiwan. There is no iOS version at this stage.
+              </p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- Download CTA -->
+    <section class="section section-alt" id="download">
+      <div class="container">
+        <div class="cta-banner">
+          <div class="cta-copy">
+            <h2>Ready for your next road trip?</h2>
+            <p>
+              Install Rōpū Mapi free from Google Play. Use it as your everyday GPS, and link the cars with a 6-letter code whenever you travel as a group.
+            </p>
+            <p class="cta-meta">
+              Android 7.0 and up &middot; Available in New Zealand &amp; Taiwan &middot; Rated 3+
+            </p>
+          </div>
+          <div>
+            <a class="btn btn-primary" href="https://play.google.com/store/apps/details?id=app.ropumapi.convoy" target="_blank" rel="noopener noreferrer">
+              Download on Google Play
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <strong style="color: var(--text-primary);">Rōpū Mapi</strong> &mdash; offered by <strong style="color: var(--text-primary);">Aadized</strong>
+          <div style="margin-top: 4px;">
+            Support &amp; privacy enquiries: <a href="mailto:support@aadized.com">support@aadized.com</a>
+          </div>
+        </div>
+        <nav class="footer-links" aria-label="Footer navigation">
+          <a href="/">Home</a>
+          <a href="convoy-mode.html">How it works</a>
+          <a href="group-road-trips.html">Group trips</a>
+          <a href="how-to-drive-in-convoy.html">Driving tips</a>
+          <a href="https://play.google.com/store/apps/details?id=app.ropumapi.convoy" target="_blank" rel="noopener noreferrer">Google Play</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms &amp; Credits</a>
+        </nav>
+      </div>
+      <p class="footer-note">
+        Map data &copy; OpenStreetMap contributors (ODbL). Road event data from NZ Transport Agency Waka Kotahi. Weather by Open-Meteo.com. Rōpū Mapi is free software provided without warranty; always obey road rules and posted signs.
+      </p>
+    </div>
+  </footer>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
