@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <title>Rōpū Mapi：多車出遊不走散的免費車隊導航 App（Android）</title>
+  <meta name="description" content="好幾台車一起出遊？Rōpū Mapi 是免費的 Android 車隊導航 App。分享 6 個字母的代碼，每台車走同一條路線、看得到彼此的位置，有人停車或落後時會提醒大家。免註冊、無廣告。">
+  <meta name="theme-color" content="#131314" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+  <link rel="canonical" href="https://aadized.com/zh-tw/">
+  <link rel="alternate" hreflang="zh-Hant-TW" href="https://aadized.com/zh-tw/">
+  <link rel="alternate" hreflang="en" href="https://aadized.com/">
+  <link rel="alternate" hreflang="x-default" href="https://aadized.com/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="og:locale:alternate" content="en_NZ">
+  <meta property="og:site_name" content="Rōpū Mapi by Aadized">
+  <meta property="og:title" content="Rōpū Mapi：多車出遊，大家一起到">
+  <meta property="og:description" content="一個人分享車隊代碼，每台車走同一條路線並有語音導航。看得到每台車在哪裡，還能投票決定在哪裡休息。免費、免註冊、無廣告。">
+  <meta property="og:url" content="https://aadized.com/zh-tw/">
+  <meta property="og:image" content="https://aadized.com/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Rōpū Mapi App 圖示">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/assets/aadized-favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/aadized-apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,400..800&family=Noto+Sans+TC:wght@400..700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,500,1,0&icon_names=android,block,construction,dark_mode,directions_car,groups,local_gas_station,person_off,record_voice_over,route,share,signal_cellular_off&display=block">
+  <link rel="stylesheet" href="/styles.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://aadized.com/zh-tw/#webpage",
+      "url": "https://aadized.com/zh-tw/",
+      "name": "Rōpū Mapi：多車出遊不走散的車隊導航 App",
+      "inLanguage": "zh-Hant-TW",
+      "isPartOf": {
+        "@id": "https://aadized.com/#website"
+      },
+      "about": {
+        "@id": "https://aadized.com/#app"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "inLanguage": "zh-Hant-TW",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "有沒有免費的 App，可以讓好幾台車一起出遊不走散？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "有。Rōpū Mapi 是一款免費的 Android App，專為多台車一起出遊設計。由一個人建立車隊並分享 6 個字母的車隊代碼，其他車輸入代碼後就會走同一條路線，有語音導航，也能在地圖上看到每台車的位置和落後多遠；有車停下來或落後太多時，大家都會收到提醒。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "每個人都要註冊帳號或留電話嗎？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "不用。Rōpū Mapi 沒有帳號、密碼，也不需要電話號碼。只要輸入車隊代碼，再取一個在地圖上顯示的呼號就可以了。車隊位置只在行程進行時暫存在伺服器記憶體中，你離開 15 秒後就會被刪除。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "沒有手機訊號還能導航嗎？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "可以繼續導航。規劃路線時，App 會把沿線的地圖存到手機裡，所以在山區等沒有訊號的地方，逐向導航仍然可以使用。你可以選擇占用多少空間（100、250 或 500 MB），也可以隨時清除。不過要即時看到其他車的位置，需要行動數據。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "車隊裡的人可以提議停下來加油或吃飯嗎？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "可以。車隊裡任何人都能查看沿線的加油站、充電站、餐廳和休息區，提議一個休息站，其他人直接在行車畫面上投票同意或不同意。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "App 有中文介面嗎？在台灣可以用嗎？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "有。App 提供繁體中文介面和中文語音提示，第一次開啟時可以選擇語言。Rōpū Mapi 目前在台灣和紐西蘭的 Google Play 上架，支援 Android 7.0 以上，暫時沒有 iOS 版本。"
+          }
+        }
+      ]
+    }
+  ]
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">跳到主要內容</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand-link" href="/zh-tw/">
+        <img class="brand-logo" src="/assets/logo-80.png" width="36" height="36" alt="Rōpū Mapi 圖示">
+        <span class="brand-text">
+          <span class="brand-name">Rōpū Mapi</span>
+          <span class="brand-by">by Aadized</span>
+        </span>
+      </a>
+      <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="primary-nav">選單</button>
+      <nav class="nav-links" id="primary-nav" data-nav-links aria-label="主要導覽">
+        <a href="/zh-tw/convoy-mode.html">運作方式</a>
+        <a href="/demo.html" hreflang="en">互動示範</a>
+        <a href="/zh-tw/group-road-trips.html">多車出遊</a>
+        <a href="/zh-tw/how-to-drive-in-convoy.html">行車提醒</a>
+        <a href="/" lang="en" hreflang="en">English</a>
+        <a class="btn btn-primary btn-sm" href="https://play.google.com/store/apps/details?id=app.ropumapi.convoy&amp;hl=zh_TW" target="_blank" rel="noopener noreferrer">在 Google Play 下載</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow">
+            <span class="eyebrow-dot" aria-hidden="true"></span>
+            已在 Google Play 上架 &middot; 台灣與紐西蘭
+          </div>
+
+          <h1>好幾台車一起出遊？<span class="accent">讓大家不走散。</span></h1>
+
+          <p class="hero-lead">
+            Rōpū Mapi 是一款免費的車隊導航 App，適合跟家人朋友多台車一起出遊。一個人分享 6 個字母的車隊代碼，每台車就會走同一條路線，並有語音導航。你看得到每台車在哪裡，有車停下來或落後太多時，App 會提醒大家。不用再一直打電話問「你們到哪了？」
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="https://play.google.com/store/apps/details?id=app.ropumapi.convoy&amp;hl=zh_TW" target="_blank" rel="noopener noreferrer">
+              在 Google Play 免費下載
+            </a>
+            <a class="btn btn-secondary" href="/zh-tw/convoy-mode.html">
+              看看怎麼用
+            </a>
+          </div>
+
+          <ul class="trust-strip" aria-label="App 重點">
+            <li><span class="msr" aria-hidden="true">android</span>免費 &middot; Android 7.0 以上</li>
+            <li><span class="msr" aria-hidden="true">person_off</span>免註冊帳號</li>
+            <li><span class="msr" aria-hidden="true">block</span>無廣告、不追蹤</li>
+            <li><span class="msr" aria-hidden="true">signal_cellular_off</span>沒訊號也能導航</li>
+          </ul>
+        </div>
+
+        <div class="hud-showcase" aria-label="Rōpū Mapi 行車畫面的互動預覽">
+          <div class="hud-tabs" role="tablist" aria-label="選擇行車畫面預覽">
+            <button class="hud-tab" role="tab" id="tab-solo" aria-controls="panel-solo" aria-selected="true" tabindex="0" type="button">逐向導航</button>
+            <button class="hud-tab" role="tab" id="tab-convoy" aria-controls="panel-convoy" aria-selected="false" tabindex="-1" type="button">即時車隊</button>
+            <button class="hud-tab" role="tab" id="tab-alert" aria-controls="panel-alert" aria-selected="false" tabindex="-1" type="button">落後提醒</button>
+            <button class="hud-tab" role="tab" id="tab-stops" aria-controls="panel-stops" aria-selected="false" tabindex="-1" type="button">加油與用餐</button>
+          </div>
+
+          <div class="phone-frame">
+            <div class="phone-screen" data-phone-screen>
+              <div class="reel-progress" aria-hidden="true">
+                <div class="reel-progress-bar" data-reel-progress></div>
+              </div>
+
+              <div class="hud-panel" id="panel-solo" role="tabpanel" aria-labelledby="tab-solo">
+                <div>
+                  <div class="mock-turn-card">
+                    <div class="mock-turn-icon" aria-hidden="true">&#8635;</div>
+                    <div>
+                      <div class="mock-turn-dist tabular" data-sim-solo-dist>180 公尺</div>
+                      <div class="mock-turn-action">在圓環從第 2 個出口離開</div>
+                      <div class="mock-turn-street">中正路</div>
+                    </div>
+                  </div>
+                  <div class="mock-pills-row" style="margin-top: 8px;">
+                    <span class="mock-pill">23&deg;C 晴朗</span>
+                    <span class="mock-pill mock-pill-live">即時 GPS</span>
+                  </div>
+                </div>
+
+                <div class="mock-map-stage">
+                  <div class="mock-route-line" aria-hidden="true"></div>
+                  <span class="mock-marker mock-marker-you">&#9650; 你</span>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                  <div class="mock-speed-cluster" aria-label="目前車速與速限 60">
+                    <div class="mock-speedo tabular">
+                      <strong data-sim-solo-speed>60</strong>
+                      <span>KM/H</span>
+                    </div>
+                    <div class="mock-limit tabular">60</div>
+                  </div>
+
+                  <div class="mock-bottom-card">
+                    <div class="mock-eta-row">
+                      <div>
+                        <div class="mock-eta-time tabular">15 分鐘</div>
+                        <div class="mock-eta-sub tabular">12.6 公里 &middot; 下午 2:04</div>
+                      </div>
+                      <span class="mock-pill">語音導航開啟</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="hud-panel" id="panel-convoy" role="tabpanel" aria-labelledby="tab-convoy" hidden>
+                <div>
+                  <div class="mock-turn-card">
+                    <div class="mock-turn-icon" aria-hidden="true">&#8625;</div>
+                    <div>
+                      <div class="mock-turn-dist tabular" data-sim-convoy-dist>7.0 公里</div>
+                      <div class="mock-turn-action">右轉進入</div>
+                      <div class="mock-turn-street">台9線</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mock-map-stage">
+                  <div class="mock-route-line" aria-hidden="true"></div>
+                  <span class="mock-marker mock-marker-you">&#9650; 領隊（你）</span>
+                  <span class="mock-marker mock-marker-peer tabular" data-sim-sam-pin>小華 &middot; +83 公尺</span>
+                  <span class="mock-marker mock-marker-peer tabular" data-sim-hemi-pin>阿明 &middot; +153 公尺</span>
+                </div>
+
+                <div class="mock-bottom-card">
+                  <div class="mock-eta-row">
+                    <div>
+                      <div class="mock-eta-time tabular">1 小時 12 分</div>
+                      <div class="mock-eta-sub tabular">69.9 公里 &middot; 下午 3:23</div>
+                    </div>
+                    <span class="mock-pill mock-pill-live">隊形良好 &middot; 3 台車</span>
+                  </div>
+                  <div class="mock-code-chip tabular">
+                    <span>車隊代碼</span>
+                    <span>P Q N T M B</span>
+                  </div>
+                  <div class="mock-roster tabular">
+                    <div class="mock-roster-row"><span>領隊（你）</span><span data-sim-lead-row>48 km/h &middot; 0 公尺</span></div>
+                    <div class="mock-roster-row"><span>小華</span><span data-sim-sam-row>50 km/h &middot; +83 公尺</span></div>
+                    <div class="mock-roster-row"><span>阿明</span><span data-sim-hemi-row>50 km/h &middot; +153 公尺</span></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="hud-panel" id="panel-alert" role="tabpanel" aria-labelledby="tab-alert" hidden>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                  <div class="mock-turn-card">
+                    <div class="mock-turn-icon" aria-hidden="true">&#8625;</div>
+                    <div>
+                      <div class="mock-turn-dist tabular">4.2 公里</div>
+                      <div class="mock-turn-action">繼續直行</div>
+                      <div class="mock-turn-street">國道5號</div>
+                    </div>
+                  </div>
+                  <div class="mock-alert-banner">
+                    成員落後太遠
+                    <small data-sim-alert-text>阿明 已落後車隊 900 公尺。</small>
+                  </div>
+                </div>
+
+                <div class="mock-map-stage">
+                  <div class="mock-route-line" aria-hidden="true"></div>
+                  <span class="mock-marker mock-marker-you">&#9650; 你</span>
+                  <span class="mock-marker mock-marker-peer tabular">小華 &middot; +95 公尺</span>
+                  <span class="mock-marker mock-marker-straggler tabular" data-sim-straggler-pin>阿明 &middot; +900 公尺</span>
+                </div>
+
+                <div class="mock-bottom-card">
+                  <div class="mock-eta-row">
+                    <div>
+                      <div class="mock-eta-time tabular">1 小時 05 分</div>
+                      <div class="mock-eta-sub tabular">62.4 公里 &middot; 下午 3:30</div>
+                    </div>
+                    <span class="mock-pill" style="background: rgba(185, 28, 28, 0.35); border-color: #EF4444; color: #FECACA;">落後者：阿明</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="hud-panel" id="panel-stops" role="tabpanel" aria-labelledby="tab-stops" hidden>
+                <div class="mock-pills-row">
+                  <span class="mock-pill">沿線停靠點</span>
+                  <span class="mock-pill">23&deg;C 晴朗</span>
+                </div>
+
+                <div class="mock-map-stage">
+                  <div class="mock-route-line" aria-hidden="true"></div>
+                  <span class="mock-marker mock-marker-fuel tabular" data-sim-fuel1-pin>加油站 &middot; 7.8 公里</span>
+                  <span class="mock-marker mock-marker-fuel tabular" data-sim-fuel2-pin>加油 / 充電 &middot; 8.1 公里</span>
+                  <span class="mock-marker mock-marker-you">&#9650; 路線 1/3</span>
+                </div>
+
+                <div class="mock-bottom-card">
+                  <div class="mock-eta-row" style="margin-bottom: 8px;">
+                    <div>
+                      <div class="mock-eta-time tabular">24 分鐘</div>
+                      <div class="mock-eta-sub tabular">20.7 公里 &middot; 預計下午 2:12 抵達</div>
+                    </div>
+                    <span class="mock-pill">附近 36 個停靠點</span>
+                  </div>
+                  <div class="mock-roster tabular">
+                    <div class="mock-roster-row"><span>加油站</span><span data-sim-fuel1-row>沿路線 7.8 公里</span></div>
+                    <div class="mock-roster-row"><span>加油 / 充電站</span><span data-sim-fuel2-row>沿路線 8.1 公里</span></div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="hud-controls">
+            <button class="hud-play-btn" type="button" data-hud-play aria-pressed="false">
+              暫停示範
+            </button>
+            <span>行車畫面動態預覽</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="how-it-works">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-kicker">運作方式</span>
+          <h2>三個步驟，大家一起出發</h2>
+          <p>
+            一般的導航 App 一次只帶一台車。跟家人朋友開兩三台車出遊時，總有人被紅燈攔下或錯過交流道，接著就是一通又一通的電話。Rōpū Mapi 幾秒鐘就能把大家的車連在一起，而且沒有人需要註冊。
+          </p>
+        </div>
+
+        <div class="steps-grid">
+          <article class="step-card">
+            <div class="step-head"><span class="msr step-icon" aria-hidden="true">route</span><span class="step-num">步驟 1</span></div>
+            <h3>規劃路線</h3>
+            <p>
+              輸入目的地，選好路線。出發前，App 會把沿線的地圖存到手機裡，進山區沒訊號也不怕。
+            </p>
+          </article>
+
+          <article class="step-card">
+            <div class="step-head"><span class="msr step-icon" aria-hidden="true">share</span><span class="step-num">步驟 2</span></div>
+            <h3>分享 6 個字母的代碼</h3>
+            <p>
+              在 App 裡點<strong>「車隊」</strong>，會產生一組代碼，例如 <strong>P Q N T M B</strong>。丟到 LINE 群組或直接唸給大家聽。其他人輸入代碼和呼號，就會拿到同一條路線。不用登入，也不用留電話。
+            </p>
+          </article>
+
+          <article class="step-card">
+            <div class="step-head"><span class="msr step-icon" aria-hidden="true">directions_car</span><span class="step-num">步驟 3</span></div>
+            <h3>一起上路</h3>
+            <p>
+              每個人都能在地圖上看到每台車的位置、車速和落後多遠。有人停車、落後太多或走錯路時，大家都會收到提醒。想加油或吃東西，任何人都能提議休息站，大家投票決定。
+            </p>
+          </article>
+        </div>
+
+        <p style="margin-top: 28px;">
+          想了解更多：<a href="/zh-tw/convoy-mode.html">車隊功能怎麼運作</a>、<a href="/zh-tw/how-to-drive-in-convoy.html">多車一起開的行車提醒</a>，以及<a href="/zh-tw/group-road-trips.html">適合哪些出遊方式</a>。
+        </p>
+      </div>
+    </section>
+
+    <section class="section" id="features">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-kicker">功能</span>
+          <h2>多車出遊好用，平常開車也好用</h2>
+          <p>
+            以下功能都已在目前的 Google Play 版本中。使用開放地圖資料，沒有任何付費功能。
+          </p>
+        </div>
+
+        <div class="feature-grid">
+          <article class="feature-card">
+            <span class="msr feature-icon badge-violet" aria-hidden="true">groups</span>
+            <span class="feature-badge badge-violet">車隊</span>
+            <h3>看得到每台車，還有提醒</h3>
+            <p>
+              大家走同一條路線，也看得到車與車之間的距離。有車停下來、落後太多或偏離路線時，整個車隊都會收到提醒。建立車隊的人也可以在需要時移除成員。
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <span class="msr feature-icon badge-amber" aria-hidden="true">local_gas_station</span>
+            <span class="feature-badge badge-amber">休息站</span>
+            <h3>提議休息站，大家投票</h3>
+            <p>
+              查看沿線的加油站、充電站、餐廳和休息區，由近到遠排列。任何人都能提議一個地點，其他人在行車畫面上投票。
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <span class="msr feature-icon badge-blue" aria-hidden="true">record_voice_over</span>
+            <span class="feature-badge badge-blue">導航</span>
+            <h3>中文語音逐向導航</h3>
+            <p>
+              清楚好讀的轉彎提示，加上中文語音，可以自己選擇提示的頻率。畫面會顯示目前車速，以及開放地圖資料中的速限，僅供參考。
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <span class="msr feature-icon badge-emerald" aria-hidden="true">signal_cellular_off</span>
+            <span class="feature-badge badge-emerald">沒訊號</span>
+            <h3>沒有訊號也能繼續導航</h3>
+            <p>
+              路線沿途的地圖會存在手機裡，所以在山區或收訊不好的地方，導航還是能用。你可以選擇占用多少空間（100、250 或 500 MB），也可以隨時清除。
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <span class="msr feature-icon badge-teal" aria-hidden="true">dark_mode</span>
+            <span class="feature-badge badge-teal">日常使用</span>
+            <h3>夜間地圖、步行與自行車</h3>
+            <p>
+              天黑後地圖會自動變暗，減少眩光。除了開車，也能規劃步行和自行車路線，並記住最近去過的地方。
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <span class="msr feature-icon badge-red" aria-hidden="true">construction</span>
+            <span class="feature-badge badge-red">路況</span>
+            <h3>封路資料目前只有紐西蘭</h3>
+            <p>
+              App 會自動避開紐西蘭公路局公告的封路與施工路段，但台灣的封路資料還沒有加入。在台灣出發前，請先查看交通部公路局或高速公路局的路況資訊。
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="privacy">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-kicker">說清楚講明白</span>
+          <h2>重視隱私，也坦白說明限制</h2>
+          <p>
+            Rōpū Mapi 會清楚告訴你收集了什麼、資料從哪裡來，以及它做不到什麼。
+          </p>
+        </div>
+
+        <div class="split-grid">
+          <div class="info-panel">
+            <h3>我們怎麼保護你的隱私</h3>
+            <ul class="check-list">
+              <li><strong>沒有帳號、廣告或追蹤：</strong>使用 App 不需要註冊，也不用提供電子郵件或電話號碼。</li>
+              <li><strong>只分享給你的車隊：</strong>在車隊中時，你的呼號和位置只暫存在伺服器記憶體中，不寫入資料庫。你離開或斷線 15 秒後就會被刪除。</li>
+              <li><strong>全程加密連線：</strong>Google Play 版本只使用 HTTPS 加密連線。</li>
+              <li><strong>問題回報可以刪除：</strong>如果你在 App 內送出問題回報，可以用「刪除我的回報」把從你手機送出的回報全部刪掉；所有回報也會在 90 天後自動刪除。</li>
+            </ul>
+            <p style="margin-top: 16px;">
+              <a href="/privacy.html" hreflang="en">閱讀完整隱私權政策（英文）&rarr;</a><br>
+              App 內有中文版本，以英文版為準。
+            </p>
+          </div>
+
+          <div class="info-panel">
+            <h3>開車與資料的重要提醒</h3>
+            <ul class="check-list">
+              <li><strong>以道路標誌為準：</strong>速限來自 OpenStreetMap 等開放資料，並非官方資料，只能當作參考，請一律遵守現場標誌。</li>
+              <li><strong>沒有即時路況：</strong>行車時間是估算的，App 不會顯示塞車情形。</li>
+              <li><strong>用自己安全的速度開：</strong>不要為了跟上車隊而超速或冒險。訊號不好時，其他車的位置可能會延遲。</li>
+              <li><strong>開放資料：</strong>使用 OpenStreetMap、OpenFreeMap、OSRM、Valhalla、Overture Places 和 Open-Meteo 等開放資料。</li>
+            </ul>
+            <p style="margin-top: 16px;">
+              <a href="/terms.html" hreflang="en">閱讀使用條款與資料來源（英文）&rarr;</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-kicker">常見問題</span>
+          <h2>常見問題</h2>
+          <p>
+            關於多車一起出遊、沒訊號時的導航和隱私，這裡直接回答。
+          </p>
+        </div>
+
+        <div class="faq-list">
+          <details class="faq-item" open>
+            <summary>有沒有免費的 App，可以讓好幾台車一起出遊不走散？</summary>
+            <div class="faq-answer">
+              <p>有。Rōpū Mapi 是一款免費的 Android App，專為多台車一起出遊設計。由一個人建立車隊並分享 6 個字母的車隊代碼，其他車輸入代碼後就會走同一條路線，有語音導航，也能在地圖上看到每台車的位置和落後多遠；有車停下來或落後太多時，大家都會收到提醒。</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>每個人都要註冊帳號或留電話嗎？</summary>
+            <div class="faq-answer">
+              <p>不用。Rōpū Mapi 沒有帳號、密碼，也不需要電話號碼。只要輸入車隊代碼，再取一個在地圖上顯示的呼號就可以了。車隊位置只在行程進行時暫存在伺服器記憶體中，你離開 15 秒後就會被刪除。</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>沒有手機訊號還能導航嗎？</summary>
+            <div class="faq-answer">
+              <p>可以繼續導航。規劃路線時，App 會把沿線的地圖存到手機裡，所以在山區等沒有訊號的地方，逐向導航仍然可以使用。你可以選擇占用多少空間（100、250 或 500 MB），也可以隨時清除。不過要即時看到其他車的位置，需要行動數據。</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>車隊裡的人可以提議停下來加油或吃飯嗎？</summary>
+            <div class="faq-answer">
+              <p>可以。車隊裡任何人都能查看沿線的加油站、充電站、餐廳和休息區，提議一個休息站，其他人直接在行車畫面上投票同意或不同意。</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>App 有中文介面嗎？在台灣可以用嗎？</summary>
+            <div class="faq-answer">
+              <p>有。App 提供繁體中文介面和中文語音提示，第一次開啟時可以選擇語言。Rōpū Mapi 目前在台灣和紐西蘭的 Google Play 上架，支援 Android 7.0 以上，暫時沒有 iOS 版本。</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="download">
+      <div class="container">
+        <div class="cta-banner">
+          <div class="cta-copy">
+            <h2>下次出遊，大家一起到</h2>
+            <p>
+              在 Google Play 免費下載 Rōpū Mapi。平常可以當一般導航用，多台車出遊時再用 6 個字母的代碼把大家連在一起。
+            </p>
+            <p class="cta-meta">
+              Android 7.0 以上 &middot; 台灣與紐西蘭上架 &middot; 3 歲以上適用
+            </p>
+          </div>
+          <div>
+            <a class="btn btn-primary" href="https://play.google.com/store/apps/details?id=app.ropumapi.convoy&amp;hl=zh_TW" target="_blank" rel="noopener noreferrer">
+              在 Google Play 下載
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <strong>Rōpū Mapi</strong>，由 <strong>Aadized</strong> 提供
+          <div>客服與隱私權問題：<a href="mailto:support@aadized.com">support@aadized.com</a></div>
+        </div>
+        <nav class="footer-links" aria-label="頁尾導覽">
+          <a href="/zh-tw/">首頁</a>
+          <a href="/zh-tw/convoy-mode.html">運作方式</a>
+          <a href="/demo.html" hreflang="en">互動示範（英文）</a>
+          <a href="/zh-tw/group-road-trips.html">多車出遊</a>
+          <a href="/zh-tw/how-to-drive-in-convoy.html">行車提醒</a>
+          <a href="https://play.google.com/store/apps/details?id=app.ropumapi.convoy&amp;hl=zh_TW" target="_blank" rel="noopener noreferrer">Google Play</a>
+          <a href="/privacy.html" hreflang="en">隱私權政策（英文）</a>
+          <a href="/terms.html" hreflang="en">使用條款（英文）</a>
+        </nav>
+      </div>
+      <p class="footer-note">地圖資料 &copy; OpenStreetMap 貢獻者（ODbL）。天氣資料來自 Open-Meteo.com。Rōpū Mapi 為免費軟體，不提供任何擔保；請一律遵守交通規則與道路標誌。</p>
+    </div>
+  </footer>
+
+  <script src="/app.js" defer></script>
+</body>
+</html>

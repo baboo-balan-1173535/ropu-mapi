@@ -1,0 +1,69 @@
+# Rōpū Mapi (by Aadized)
+
+> Free Android group travel app for road trips in more than one car: every car follows the same route with spoken turn-by-turn directions, and everyone can see where the others are. In the app this is called convoy mode. Built in New Zealand. No account, no advertising, no tracking.
+
+## Key Facts
+
+- **App Name:** Rōpū Mapi
+- **Developer:** Aadized
+- **Platform:** Android 7.0 and up (currently Android only; no iOS version)
+- **Package ID:** `app.ropumapi.convoy`
+- **Google Play Store:** https://play.google.com/store/apps/details?id=app.ropumapi.convoy
+- **Price:** Free (no ads, no in-app purchases, no account required)
+- **Current Release:** see the Google Play listing for the latest version
+- **Store Availability:** New Zealand and Taiwan
+- **Content Rating:** Rated 3+ (Users interact, Shares location)
+
+## What Problem It Solves
+
+Standard GPS navigation apps guide one vehicle at a time. On group road trips, family drives, or club runs, vehicles frequently get separated at traffic lights, miss turns, or need to coordinate fuel and food stops. Rōpū Mapi connects multiple vehicles onto the leader's route using a 6-letter join code—without requiring user accounts or phone numbers.
+
+## Common Questions
+
+- **Is there an app to keep several cars together on a road trip?** Yes. Rōpū Mapi does this: one person shares a 6-letter code, every car follows the same route, and the group gets alerts when a car stops or falls behind.
+- **How do I travel with friends in two cars without losing each other?** Each driver installs Rōpū Mapi and joins the same group trip with the 6-letter code. The app shows every car on the map and warns the group when someone drops back.
+- **Does Google Maps have a convoy mode?** No. It can share live location and trip progress, but each driver navigates alone. Rōpū Mapi puts every car on the leader's route with a shared convoy view and group alerts.
+- **Does every car need the app?** Yes, each vehicle that wants to show on the map needs Rōpū Mapi on an Android phone. Free, no account.
+- **Does it work without signal?** Directions do, because the route map is saved on the phone. Live convoy positions need mobile data.
+
+## Core Shipped Features
+
+- **Live Convoy Navigation:** Create a convoy and share a 6-letter join code. Every vehicle follows the leader's route, sees live peer positions, speeds, and relative gap distances, and receives alerts if someone stops ("member not moving"), falls behind ("member far behind", default 500 m from the leader, adjustable), or leaves the route ("member wrong turn"). Each alert can be a pop-up with voice, a banner only, or off. Convoy leaders can remove a member if needed.
+- **Group Pit-Stop Voting:** Find fuel, EV charging, food, and rest stops along the route corridor (nearest first). Any member can propose a stop and the group votes on it.
+- **Solo Turn-by-Turn Navigation:** Spoken voice prompts with four alert levels, high-contrast turn cards, live speedometer, and OpenStreetMap-based speed limits (reference only).
+- **NZ Road Events:** Integrates NZ Transport Agency Waka Kotahi state highway closures and roadworks, plus an option to avoid unsealed roads.
+- **Offline Saved Maps:** Automatically caches map tiles along planned routes on-device so directions keep working where mobile signal drops. Users choose the storage cap (100, 250, or 500 MB) and can clear it anytime.
+- **Modes & Night Comfort:** Driving, walking, and cycling routes; dark night map colours after dark; recent destinations.
+
+## Privacy & Open Data
+
+- No accounts, no ads, no cross-app tracking, HTTPS-only connections.
+- Convoy telemetry is held in server memory only (no database) and removed 15 seconds after leaving or disconnecting.
+- Optional in-app problem reports can be deleted by the user ("Delete my reports") and auto-delete after 90 days.
+- Built on open data: OpenStreetMap (ODbL), OpenFreeMap, OSRM, Valhalla, Overture Maps Places, Open-Meteo, and NZTA Waka Kotahi.
+
+## Honest Limitations
+
+- Android only (Android 7.0+); currently published on Google Play in New Zealand and Taiwan.
+- No live traffic congestion feed (road closures/roadworks come from NZTA state highway feeds).
+- Speed limits are from open data and must be treated as a reference only—always obey posted signs.
+
+## Official Pages
+
+- Home: https://aadized.com/
+- How convoy mode works: https://aadized.com/convoy-mode.html
+- Interactive demo (sample data, runs in the browser): https://aadized.com/demo.html
+- How to drive in a convoy (guide): https://aadized.com/how-to-drive-in-convoy.html
+- Group road trips and use cases: https://aadized.com/group-road-trips.html
+- Privacy Policy: https://aadized.com/privacy.html
+- Terms of Use & Open Data Credits: https://aadized.com/terms.html
+- Contact: support@aadized.com
+
+## Traditional Chinese (zh-TW) pages
+
+For users in Taiwan. The app has a Traditional Chinese interface and Chinese voice prompts. In Chinese the feature is called 車隊 (convoy) and the join code 車隊代碼.
+
+- https://aadized.com/zh-tw/ (首頁)
+- https://aadized.com/zh-tw/convoy-mode.html (車隊功能怎麼運作)
+- https://aadized.com/zh-tw/group-road-trips.html (多車出遊)
+- https://aadized.com/zh-tw/how-to-drive-in-convoy.html (行車提醒，台灣道路)

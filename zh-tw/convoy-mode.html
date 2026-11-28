@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <title>車隊功能怎麼運作：多台車走同一條路線 — Rōpū Mapi</title>
+  <meta name="description" content="Rōpū Mapi 車隊導航怎麼用：分享 6 個字母的代碼，大家走同一條路線，看得到每台車的位置和距離，有車停下、落後或走錯路時會提醒。免費 Android App。">
+  <meta name="theme-color" content="#131314" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+  <link rel="canonical" href="https://aadized.com/zh-tw/convoy-mode.html">
+  <link rel="alternate" hreflang="zh-Hant-TW" href="https://aadized.com/zh-tw/convoy-mode.html">
+  <link rel="alternate" hreflang="en" href="https://aadized.com/convoy-mode.html">
+  <link rel="alternate" hreflang="x-default" href="https://aadized.com/convoy-mode.html">
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="og:locale:alternate" content="en_NZ">
+  <meta property="og:site_name" content="Rōpū Mapi by Aadized">
+  <meta property="og:title" content="車隊功能怎麼運作：讓每台車走同一條路線">
+  <meta property="og:description" content="一個人分享代碼，每台車走同一條路線，在地圖上看得到彼此，有人停車或落後時會收到提醒。">
+  <meta property="og:url" content="https://aadized.com/zh-tw/convoy-mode.html">
+  <meta property="og:image" content="https://aadized.com/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Rōpū Mapi App 圖示">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/assets/aadized-favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/aadized-apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,400..800&family=Noto+Sans+TC:wght@400..700&display=swap">
+  <link rel="stylesheet" href="/styles.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": "車隊功能怎麼運作：讓每台車走同一條路線",
+      "description": "Rōpū Mapi 車隊功能說明：車隊代碼、共同路線、即時位置與距離、提醒和休息站投票。",
+      "datePublished": "2026-11-21",
+      "dateModified": "2026-11-21",
+      "inLanguage": "zh-Hant-TW",
+      "mainEntityOfPage": "https://aadized.com/zh-tw/convoy-mode.html",
+      "image": "https://aadized.com/assets/og-image.png",
+      "author": {
+        "@type": "Organization",
+        "@id": "https://aadized.com/#org",
+        "name": "Aadized",
+        "url": "https://aadized.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "@id": "https://aadized.com/#org",
+        "name": "Aadized",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://aadized.com/assets/aadized-icon-512.png"
+        }
+      },
+      "about": {
+        "@type": "SoftwareApplication",
+        "@id": "https://aadized.com/#app",
+        "name": "Rōpū Mapi"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "首頁",
+          "item": "https://aadized.com/zh-tw/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "運作方式",
+          "item": "https://aadized.com/zh-tw/convoy-mode.html"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "inLanguage": "zh-Hant-TW",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Google 地圖有車隊模式嗎？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Google 地圖可以分享即時位置和行程進度，但每個駕駛還是各自導航，沒有共同的車隊畫面，也沒有車隊提醒。Rōpū Mapi 就是為這個設計的：每台車用同一組 6 個字母的代碼加入車隊，走領隊的路線，並在地圖上看到其他車和彼此的距離。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "一個車隊可以有幾台車？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "車隊功能是為一起出遊的小團體設計的，例如家族旅遊或車友聚會。每台車用同一組代碼加入，並取一個自己的呼號。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "每個駕駛都要裝 App 嗎？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "要。想出現在地圖上、收到導航和提醒的每台車，都需要在 Android 手機（Android 7.0 以上）安裝 Rōpū Mapi。App 免費，也不用註冊。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "沒有手機訊號時，車隊功能還能用嗎？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "逐向導航可以繼續用，因為路線地圖已經存在手機裡。其他車的即時位置需要行動數據，所以在沒訊號的地方會暫停更新，恢復訊號後就會跟上。"
+          }
+        }
+      ]
+    }
+  ]
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">跳到主要內容</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="back-link" href="/zh-tw/" aria-label="返回首頁"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="m7.83 13 5.6 5.6L12 20l-8-8 8-8 1.43 1.4-5.6 5.6H20v2H7.83Z"/></svg><span>首頁</span></a>
+      <a class="brand-link" href="/zh-tw/">
+        <img class="brand-logo" src="/assets/logo-80.png" width="36" height="36" alt="Rōpū Mapi 圖示">
+        <span class="brand-text">
+          <span class="brand-name">Rōpū Mapi</span>
+          <span class="brand-by">by Aadized</span>
+        </span>
+      </a>
+      <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="primary-nav">選單</button>
+      <nav class="nav-links" id="primary-nav" data-nav-links aria-label="主要導覽">
+        <a href="/zh-tw/convoy-mode.html" aria-current="page">運作方式</a>
+        <a href="/demo.html" hreflang="en">互動示範</a>
+        <a href="/zh-tw/group-road-trips.html">多車出遊</a>
+        <a href="/zh-tw/how-to-drive-in-convoy.html">行車提醒</a>
+        <a href="/convoy-mode.html" lang="en" hreflang="en">English</a>
+        <a class="btn btn-primary btn-sm" href="https://play.google.com/store/apps/details?id=app.ropumapi.convoy&amp;hl=zh_TW" target="_blank" rel="noopener noreferrer">在 Google Play 下載</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="doc-main" id="main-content">
+    <div class="container">
+      <article class="doc-wrap">
+        <header class="doc-header">
+          <span class="section-kicker">運作方式</span>
+          <h1>車隊功能怎麼運作</h1>
+          <p class="doc-meta">從車隊代碼到各種提醒，一次說明清楚。更新日期：2026/11/21。</p>
+        </header>
+
+        <p>
+          一般的導航 App 只帶一台車。三台車一起從台北出發去墾丁，每個駕駛各自看自己的導航，有人被紅燈攔下，接下來一個小時大家都在 LINE 群組問「你們到哪了？」。Rōpū Mapi 讓每台車走同一條路線，也讓每個駕駛看得到其他人在哪裡。
+        </p>
+
+        <section class="doc-section">
+          <h2>建立車隊</h2>
+          <ol>
+            <li><strong>由一個人規劃路線。</strong>我們稱他為領隊。像平常一樣輸入目的地就好。</li>
+            <li><strong>領隊點「車隊」。</strong>App 會產生一組 6 個字母的代碼，例如 <strong>PQNTMB</strong>。用什麼方式分享都可以：直接唸出來、傳簡訊，或貼到 LINE 群組。</li>
+            <li><strong>其他人輸入代碼和呼號。</strong>呼號就是你在地圖上顯示的名字，例如「小華」或「白色休旅」。不需要帳號、密碼或電話號碼。</li>
+            <li><strong>每台車都拿到領隊的路線。</strong>現在每個駕駛都有同一趟行程的語音逐向導航。</li>
+          </ol>
+        </section>
+
+        <section class="doc-section">
+          <h2>每個駕駛會看到什麼</h2>
+          <ul>
+            <li>地圖上的每台車，以及它們的呼號。</li>
+            <li>車隊成員清單，顯示每台車的車速和距離領隊多遠。</li>
+            <li>車隊是聚在一起還是拉長了。預設距離領隊超過 250 公尺算「車隊拉長」，超過 500 公尺算「落後」。這兩個距離都可以在設定中調整，配合國道或市區的路況。</li>
+          </ul>
+        </section>
+
+        <section class="doc-section">
+          <h2>提醒</h2>
+          <p>狀況有變化時，App 會通知整個車隊，駕駛不用一直盯著螢幕：</p>
+          <ul>
+            <li><strong>成員落後太遠：</strong>有車落後超過設定的距離。</li>
+            <li><strong>成員未移動：</strong>有車停下來了，可能是去加油，也可能是故障。</li>
+            <li><strong>成員走錯路：</strong>有車偏離了路線。回到路線上後，提醒會自動消失。</li>
+          </ul>
+          <p>
+            每一種提醒都可以設成彈出視窗加語音、安靜的橫幅，或關閉。覺得提醒太吵的駕駛，可以只留橫幅。
+          </p>
+        </section>
+
+        <section class="doc-section">
+          <h2>休息站和大家一起決定</h2>
+          <p>
+            車隊裡任何人都能查看沿線的加油站、充電站、餐廳和休息區，依距離由近到遠排列。提議一個地點後，其他人在行車畫面上投票。比起在電話裡討論要在哪個服務區停，方便多了。
+          </p>
+          <p>
+            領隊也可以把成員移出車隊，例如有一台車要提早回家。
+          </p>
+        </section>
+
+        <section class="doc-section">
+          <h2>沒有訊號的時候</h2>
+          <p>
+            沒有手機訊號時，導航還是能用，因為出發前 App 已經把路線地圖存在手機裡。其他車的即時位置需要行動數據，所以在收訊死角，其他車會停在最後看到的位置，等恢復訊號後再更新。走山路之前，建議先約好會合點。<a href="/zh-tw/how-to-drive-in-convoy.html">行車提醒</a>有更多說明。
+          </p>
+        </section>
+
+        <section class="doc-section">
+          <h2>車隊中的隱私</h2>
+          <p>
+            你的位置只會分享給你加入的車隊成員，而且只在你待在車隊裡的時候。伺服器只把位置暫存在記憶體中，從不寫入資料庫，你離開或斷線 15 秒後就會刪除。詳細內容請看<a href="/privacy.html" hreflang="en">隱私權政策（英文）</a>。
+          </p>
+        </section>
+
+        <section class="doc-section">
+          <h2>跟「分享位置」有什麼不同</h2>
+          <p>
+            LINE 或地圖 App 都能分享即時位置，讓你知道對方在哪裡。但它不會把對方放在你的路線上，不會在對方停下時提醒你，也不能讓大家一起決定下一站。Rōpū Mapi 把這些都放在你本來就在用的導航畫面裡。
+          </p>
+        </section>
+
+        <section class="doc-section">
+          <h2>常見問題</h2>
+          <h3>Google 地圖有車隊模式嗎？</h3>
+          <p>Google 地圖可以分享即時位置和行程進度，但每個駕駛還是各自導航，沒有共同的車隊畫面，也沒有車隊提醒。Rōpū Mapi 就是為這個設計的：每台車用同一組 6 個字母的代碼加入車隊，走領隊的路線，並在地圖上看到其他車和彼此的距離。</p>
+          <h3>一個車隊可以有幾台車？</h3>
+          <p>車隊功能是為一起出遊的小團體設計的，例如家族旅遊或車友聚會。每台車用同一組代碼加入，並取一個自己的呼號。</p>
+          <h3>每個駕駛都要裝 App 嗎？</h3>
+          <p>要。想出現在地圖上、收到導航和提醒的每台車，都需要在 Android 手機（Android 7.0 以上）安裝 Rōpū Mapi。App 免費，也不用註冊。</p>
+          <h3>沒有手機訊號時，車隊功能還能用嗎？</h3>
+          <p>逐向導航可以繼續用，因為路線地圖已經存在手機裡。其他車的即時位置需要行動數據，所以在沒訊號的地方會暫停更新，恢復訊號後就會跟上。</p>
+        </section>
+
+        <div class="doc-callout" style="margin-top: 34px;">
+          <strong>下載 Rōpū Mapi：</strong>在 <a href="https://play.google.com/store/apps/details?id=app.ropumapi.convoy&amp;hl=zh_TW" target="_blank" rel="noopener noreferrer">Google Play</a> 免費下載，支援 Android 7.0 以上。請不要為了跟上車隊而超速或冒險，手機交給乘客操作。
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <strong>Rōpū Mapi</strong>，由 <strong>Aadized</strong> 提供
+          <div>客服與隱私權問題：<a href="mailto:support@aadized.com">support@aadized.com</a></div>
+        </div>
+        <nav class="footer-links" aria-label="頁尾導覽">
+          <a href="/zh-tw/">首頁</a>
+          <a href="/zh-tw/convoy-mode.html">運作方式</a>
+          <a href="/demo.html" hreflang="en">互動示範（英文）</a>
+          <a href="/zh-tw/group-road-trips.html">多車出遊</a>
+          <a href="/zh-tw/how-to-drive-in-convoy.html">行車提醒</a>
+          <a href="https://play.google.com/store/apps/details?id=app.ropumapi.convoy&amp;hl=zh_TW" target="_blank" rel="noopener noreferrer">Google Play</a>
+          <a href="/privacy.html" hreflang="en">隱私權政策（英文）</a>
+          <a href="/terms.html" hreflang="en">使用條款（英文）</a>
+        </nav>
+      </div>
+      <p class="footer-note">地圖資料 &copy; OpenStreetMap 貢獻者（ODbL）。天氣資料來自 Open-Meteo.com。Rōpū Mapi 為免費軟體，不提供任何擔保；請一律遵守交通規則與道路標誌。</p>
+    </div>
+  </footer>
+
+  <script src="/app.js" defer></script>
+</body>
+</html>

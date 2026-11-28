@@ -1,0 +1,1331 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<title>Interactive Demo: Convoy Navigation from Christchurch to Akaroa — Rōpū Mapi</title>
+<meta name="description" content="Try Rōpū Mapi in your browser: follow a four-car convoy from Christchurch to Akaroa, with shared turn-by-turn directions, stop alerts and a pit stop vote.">
+<link rel="canonical" href="https://aadized.com/demo.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_NZ">
+<meta property="og:site_name" content="Rōpū Mapi by Aadized">
+<meta property="og:title" content="Four cars, one map: try the Rōpū Mapi demo">
+<meta property="og:description" content="Try Rōpū Mapi in your browser: follow a four-car convoy from Christchurch to Akaroa, with shared turn-by-turn directions, stop alerts and a pit stop vote.">
+<meta property="og:url" content="https://aadized.com/demo.html">
+<meta property="og:image" content="https://aadized.com/assets/og-demo.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Rōpū Mapi driving screen showing four cars on one route, with the words: Four cars. One map.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://aadized.com/assets/og-demo.png">
+<meta name="twitter:title" content="Four cars, one map: try the Rōpū Mapi demo">
+<meta name="twitter:description" content="Try Rōpū Mapi in your browser: follow a four-car convoy from Christchurch to Akaroa, with shared turn-by-turn directions, stop alerts and a pit stop vote.">
+<meta name="theme-color" content="#131314" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/assets/aadized-favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/aadized-apple-touch-icon.png">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}</style>
+</head>
+<body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,400..800&family=Inter:wght@500;600;700;800&display=swap">
+<link rel="stylesheet" href="/styles.css">
+<style>
+/* Layout: headline and tour on the left, a live phone on a brand-yellow "map" panel on the right; stacks phone-first under the headline on narrow screens */
+:root{
+  --bg:var(--md-bg); --surface:var(--md-surface-2); --fg:var(--md-on-surface); --muted:var(--md-on-surface-variant); --line:var(--md-outline-variant);
+  --brand:var(--md-primary-container); --brand-deep:var(--md-primary); --maroon:var(--md-primary); --accent:var(--md-primary); --on-brand:var(--md-on-primary-container);
+  --f-display:var(--font); --f-body:var(--font); --f-mono:var(--font);
+  --f-app:"Inter",system-ui,"Segoe UI",Roboto,sans-serif;
+  --shadow:none;
+}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.55}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+.page{max-width:var(--container-max);margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:clamp(28px,4vw,56px) clamp(48px,6vw,80px)}
+@media (min-width:720px){.page{padding-left:24px;padding-right:24px}}
+
+
+.demo-hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,460px);grid-template-areas:"copy stage" "tour stage";column-gap:64px;row-gap:34px;align-items:start}
+.copy{grid-area:copy;padding-top:24px}
+.stage{grid-area:stage}
+.tour{grid-area:tour}
+@media (max-width:900px){
+  .demo-hero{grid-template-columns:minmax(0,1fr);grid-template-areas:"copy" "stage" "tour";row-gap:26px}
+  .copy{padding-top:0}
+}
+@media (min-width:901px){.stage{position:sticky;top:max(16px,env(safe-area-inset-top,0px))}}
+
+.demo-eyebrow{display:inline-flex;align-items:center;gap:8px;min-height:32px;padding:0 14px 0 12px;margin:0 0 20px;border-radius:var(--r-sm);border:1px solid var(--md-outline-variant);color:var(--md-on-surface-variant);font-size:.875rem;font-weight:500}
+.demo-eyebrow::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--g-green)}
+.demo-hero h1{font-family:var(--f-display);font-weight:500;font-size:clamp(2.4rem,5.2vw,3.75rem);line-height:1.08;letter-spacing:-.025em;text-wrap:balance;margin:0 0 20px}
+h1 .mark{color:var(--md-primary)}
+.lede{font-size:clamp(1.05rem,1.6vw,1.2rem);max-width:34em;margin:0 0 14px;color:var(--muted)}
+.name-note{color:var(--muted);font-size:.95rem;margin:0}
+.name-note b{color:var(--fg)}
+
+.tour h2{font-family:var(--f-display);font-weight:500;font-size:1.375rem;margin:0 0 4px}
+.tour > p{margin:0 0 14px;color:var(--muted);font-size:.95rem}
+.tour ol{list-style:none;margin:0;padding:8px;display:grid;gap:2px;background:var(--md-surface-2);border-radius:var(--r-lg)}
+.tour li{border:0}
+.step{display:grid;grid-template-columns:36px minmax(0,1fr);gap:14px;width:100%;text-align:left;background:none;border:0;padding:14px 12px;cursor:pointer;border-radius:var(--r-md)}
+.step:hover{background:var(--md-hover)}
+.step .n{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-weight:600;font-size:.875rem;border:1px solid var(--md-outline);color:var(--muted)}
+.step b{display:block;font-family:var(--f-display);font-weight:500;font-size:1.0625rem;line-height:1.35}
+.step span.d{display:block;color:var(--muted);font-size:.93rem;line-height:1.45;margin-top:2px;max-width:38em}
+.step[aria-current="step"]{background:var(--md-secondary-container)}
+.step[aria-current="step"] .n{background:var(--md-primary);border-color:var(--md-primary);color:var(--md-on-primary)}
+.step[aria-current="step"] span.d{color:var(--md-on-secondary-container)}
+.step[aria-current="step"] b{color:var(--md-on-secondary-container)}
+.step.done .n{border-color:transparent;background:var(--g-green-c);color:var(--g-on-green-c)}
+
+/* stage: brand yellow panel with contour lines, phone on top */
+.panel{position:relative;border-radius:var(--r-xl);background:var(--brand);color:var(--on-brand);padding:26px 18px 18px;overflow:hidden}
+.panel .contours{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;color:var(--on-brand);opacity:.18}
+.phone-box{position:relative;margin:0 auto}
+.phone{position:absolute;left:0;top:0;width:380px;height:780px;transform-origin:0 0;border-radius:52px;background:#1b1210;padding:10px;box-shadow:0 0 0 2px #3b2a26,0 30px 50px -18px rgba(60,10,0,.6)}
+.panel-foot{position:relative;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:16px}
+.tog{display:inline-flex;align-items:center;gap:7px;min-height:32px;padding:0 14px;border-radius:var(--r-xs);border:1px solid var(--on-brand);background:transparent;color:var(--on-brand);font-weight:500;font-size:.875rem;cursor:pointer}
+.tog[aria-pressed="true"]{background:var(--on-brand);color:var(--brand);border-color:var(--on-brand)}
+.tog svg{width:14px;height:14px}
+.panel-note{position:relative;margin:12px 4px 0;text-align:center;font-size:.8125rem;color:var(--on-brand);opacity:.85}
+
+.build{margin-top:clamp(48px,6vw,80px);padding:clamp(24px,4vw,40px);border-radius:var(--r-xl);background:var(--md-surface-1);border:1px solid var(--md-outline-variant);display:grid;grid-template-columns:minmax(0,260px) minmax(0,1fr);gap:28px}
+@media (max-width:760px){.build{grid-template-columns:minmax(0,1fr);gap:12px}}
+.build h2{font-family:var(--f-display);font-weight:500;font-size:clamp(1.5rem,2.8vw,2rem);line-height:1.2;margin:0}
+.build h2 + p{color:var(--muted);margin:8px 0 0;font-size:.95rem}
+.build dl{margin:0;display:grid;grid-template-columns:minmax(0,170px) minmax(0,1fr);border-top:1px solid var(--line)}
+.build dt,.build dd{padding:13px 0;border-bottom:1px solid var(--line);margin:0}
+.build dt{font-size:.875rem;font-weight:600;color:var(--md-primary);padding-right:16px;padding-top:14px}
+.build dd{font-size:1rem;color:var(--muted)}
+@media (max-width:520px){.build dl{grid-template-columns:minmax(0,1fr)}.build dt{border-bottom:0;padding-bottom:0}}
+
+.demo-note{margin:28px 0 0;max-width:60em;color:var(--muted);font-size:.875rem}
+
+/* ================= PHONE (its own world: the app's dark UI on a light map) ================= */
+.screen{position:relative;width:360px;height:760px;border-radius:42px;overflow:hidden;background:#aad3df;font-family:var(--f-app);color:#f8fafc;-webkit-font-smoothing:antialiased;user-select:none;-webkit-user-select:none;isolation:isolate}
+.screen button{cursor:pointer;border:0;font-family:var(--f-app)}
+.notch{position:absolute;top:9px;left:50%;width:92px;height:24px;margin-left:-46px;background:#000;border-radius:14px;z-index:60}
+.statusbar{position:absolute;top:0;left:0;right:0;height:40px;display:flex;justify-content:space-between;align-items:center;padding:0 30px 0 32px;font-size:12.5px;font-weight:700;color:#0f172a;z-index:55;pointer-events:none;font-variant-numeric:tabular-nums}
+.statusbar.dark{color:#f8fafc}
+.statusbar .sys{display:flex;gap:5px;align-items:center}
+.map{position:absolute;left:-270px;top:-400px;width:900px;height:1400px;transform-origin:450px 920px;transition:transform .9s cubic-bezier(.3,.7,.2,1)}
+.map.tilt{transform:perspective(760px) rotateX(46deg)}
+.map svg{display:block}
+.mlabel{font-family:var(--f-app);font-weight:700;paint-order:stroke;stroke:#fff;stroke-width:3.2px;stroke-linejoin:round;fill:#3b3631}
+.mlabel.big{font-weight:800;font-size:15px;fill:#1f1b18}
+.mlabel.water{fill:#3a77a3;font-style:italic;font-weight:600;stroke:#aad3df}
+.mlabel.region{fill:#7b6f5a;letter-spacing:.18em;font-size:10px;font-weight:700}
+
+.panelc{background:rgba(15,23,42,.95);border:1px solid rgba(148,163,184,.18);border-radius:22px;box-shadow:0 10px 28px rgba(2,6,23,.35)}
+.ui{position:absolute;inset:0;pointer-events:none;z-index:20}
+.ui > *{pointer-events:auto}
+
+/* plan */
+.topcard{position:absolute;top:40px;left:10px;right:10px;padding:10px;display:grid;gap:9px}
+.toprow{display:flex;gap:8px;align-items:center}
+.ibtn{width:42px;height:42px;border-radius:14px;background:#1e293b;color:#e2e8f0;display:grid;place-items:center;flex:none}
+.ibtn.red{background:#5b1517;color:#fca5a5}
+.ibtn svg{width:18px;height:18px}
+.search{flex:1;min-width:0;height:42px;border-radius:14px;background:#0b1222;border:1px solid #334155;display:flex;align-items:center;gap:8px;padding:0 12px;font-weight:700;font-size:15px}
+.search svg{width:16px;height:16px;color:#60a5fa;flex:none}
+.search .caret{width:2px;height:18px;background:#60a5fa;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.modes{display:flex;gap:4px;background:#0b1222;border-radius:14px;padding:4px}
+.mode{flex:1;height:32px;border-radius:10px;background:transparent;color:#94a3b8;font-weight:700;font-size:13px}
+.mode.on{background:#2563eb;color:#fff}
+.sheet{position:absolute;left:10px;right:10px;bottom:10px;padding:14px 12px 12px;transition:transform .5s cubic-bezier(.3,.7,.2,1)}
+.sheet.lowered{transform:translateY(calc(100% - 64px))}
+.sheet-h{display:flex;align-items:center;justify-content:space-between;font-size:11px;font-weight:800;letter-spacing:.12em;color:#94a3b8;margin-bottom:10px}
+.routes{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rc{text-align:left;padding:10px;border-radius:16px;background:#0b1222;border:1.5px solid #1e293b;color:#f8fafc;display:grid;gap:3px}
+.rc.on{border-color:#3b82f6;background:#13244a}
+.rc .tag{justify-self:start;font-size:9.5px;font-weight:800;letter-spacing:.08em;padding:3px 7px;border-radius:7px;background:#1e3a8a;color:#bfdbfe}
+.rc .tag.grey{background:#334155;color:#cbd5e1}
+.rc .row{display:flex;justify-content:space-between;align-items:center}
+.rc .plus{font-size:10px;font-weight:800;color:#fca5a5;background:#4c1418;padding:2px 6px;border-radius:6px}
+.rc .tm{font-size:22px;font-weight:800;color:#34d399;font-variant-numeric:tabular-nums;line-height:1.1}
+.rc .tm small{font-size:12px;color:#94a3b8;font-weight:600}
+.rc .via{font-size:12px;font-weight:700;color:#e2e8f0}
+.rc .meta{display:flex;justify-content:space-between;font-size:10.5px;color:#94a3b8;font-variant-numeric:tabular-nums}
+.inforow{display:flex;gap:6px;margin:10px 0 8px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:5px;height:28px;padding:0 10px;border-radius:999px;background:#1e293b;border:1px solid #334155;font-size:11.5px;font-weight:700;color:#e2e8f0}
+.pill.warn{background:#3b2405;border-color:#92400e;color:#fcd34d}
+.pill.ok{background:#052e1f;border-color:#047857;color:#6ee7b7}
+.summary{display:flex;align-items:baseline;gap:6px;font-variant-numeric:tabular-nums;margin-bottom:9px}
+.summary b{font-size:20px;color:#34d399}
+.summary span{font-size:13px;color:#cbd5e1;font-weight:700}
+.summary .arr{margin-left:auto;font-size:12px;color:#e2e8f0}
+.chips{display:flex;gap:6px;margin-bottom:10px;overflow:hidden}
+.chip{flex:1;height:30px;border-radius:999px;background:#1e293b;color:#e2e8f0;font-size:11.5px;font-weight:700;white-space:nowrap;padding:0 6px}
+.chip.on{background:#f59e0b;color:#1c1003}
+.actions{display:grid;grid-template-columns:1.15fr 1.15fr .8fr;gap:7px}
+.act{height:52px;border-radius:16px;font-weight:800;font-size:14px;color:#fff;display:flex;align-items:center;justify-content:center;gap:6px}
+.act.go{background:linear-gradient(180deg,#10b981,#059669)}
+.act.cv{background:linear-gradient(180deg,#4f46e5,#3730a3)}
+.act.pv{background:#1e293b;color:#7dd3fc;border:1px solid #334155;font-size:13px}
+.act svg{width:17px;height:17px}
+
+/* hint pulse */
+.hint{position:relative}
+.hint::after{content:"";position:absolute;inset:-4px;border-radius:inherit;border:2.5px solid #fde047;animation:pulse 1.4s ease-out infinite;pointer-events:none}
+@keyframes pulse{0%{opacity:1;transform:scale(.97)}100%{opacity:0;transform:scale(1.12)}}
+
+/* convoy */
+.cv-sheet{position:absolute;left:10px;right:10px;bottom:10px;padding:16px 14px 14px}
+.cv-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.cv-title h3{margin:0;font-size:18px;font-weight:800}
+.cv-title .x{width:34px;height:34px;border-radius:12px;background:#1e293b;color:#cbd5e1;display:grid;place-items:center}
+.cv-code{display:grid;grid-template-columns:96px 1fr;gap:12px;align-items:center;background:#0b1222;border:1px solid #1e293b;border-radius:18px;padding:10px}
+.qr{width:96px;height:96px;background:#fff;border-radius:10px;padding:6px}
+.cv-code .lbl{font-size:11px;color:#94a3b8;font-weight:700}
+.cv-code .code{font-family:"Overpass Mono",ui-monospace,monospace;font-weight:700;font-size:26px;letter-spacing:.14em;color:#fde047;line-height:1.2}
+.cv-code .row2{display:flex;gap:6px;margin-top:6px}
+.smallbtn{height:30px;padding:0 12px;border-radius:10px;background:#1e293b;color:#e2e8f0;font-weight:700;font-size:12px}
+.members{list-style:none;margin:12px 0;padding:0;display:grid;gap:6px}
+.members li{display:flex;align-items:center;gap:10px;height:40px;padding:0 10px;border-radius:12px;background:#111c33;font-size:13.5px;font-weight:700;transition:opacity .4s,transform .4s}
+.members li.wait{opacity:.35}
+.members li.wait .st{color:#64748b}
+.members .dot{width:22px;height:22px;border-radius:50%;border:2px solid #fff;flex:none}
+.members .st{margin-left:auto;font-size:11.5px;color:#6ee7b7;font-weight:700}
+.members .lead{font-size:10px;padding:2px 6px;border-radius:6px;background:#1e3a8a;color:#bfdbfe;font-weight:800;letter-spacing:.05em}
+.cv-start{width:100%;height:52px;border-radius:16px;background:linear-gradient(180deg,#10b981,#059669);color:#fff;font-weight:800;font-size:15px}
+.cv-start:disabled{background:#1e293b;color:#64748b;cursor:default}
+
+/* drive */
+.banner{position:absolute;top:40px;left:10px;right:10px;height:96px;display:flex;align-items:center;gap:12px;padding:0 12px;border-radius:22px;background:rgba(15,23,42,.96);border:1px solid rgba(59,130,246,.35)}
+.turnico{width:62px;height:62px;border-radius:16px;background:#1e3a8a;border:1.5px solid #3b82f6;display:grid;place-items:center;flex:none}
+.turnico svg{width:36px;height:36px}
+.bn-txt{min-width:0;flex:1}
+.bn-act{font-size:12.5px;font-weight:800;color:#93c5fd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bn-dist{font-size:30px;font-weight:800;line-height:1.05;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.bn-road{font-size:13px;font-weight:700;color:#cbd5e1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.voicebar{position:absolute;top:144px;left:10px;right:10px;min-height:40px;display:flex;align-items:center;gap:9px;padding:8px 12px;border-radius:14px;background:rgba(30,41,59,.92);font-size:12.5px;font-weight:700;color:#e2e8f0;transition:opacity .4s}
+.voicebar svg{width:16px;height:16px;color:#a78bfa;flex:none}
+.voicebar.off{opacity:0}
+.toast{position:absolute;top:192px;left:10px;right:10px;display:flex;gap:10px;align-items:flex-start;padding:11px 12px;border-radius:16px;background:rgba(15,23,42,.97);border:1px solid #334155;transform:translateY(-8px);opacity:0;transition:opacity .35s,transform .35s;pointer-events:none}
+.toast.show{opacity:1;transform:none}
+.toast .ti{font-size:18px;line-height:1.2;flex:none}
+.toast b{display:block;font-size:13px}
+.toast span{display:block;font-size:11.5px;color:#cbd5e1;font-weight:600;margin-top:1px}
+.toast.warn{border-color:#b45309;background:rgba(41,25,5,.97)}
+.toast.bad{border-color:#b91c1c;background:rgba(46,10,12,.97)}
+.toast.good{border-color:#047857;background:rgba(3,34,24,.97)}
+.mchips{position:absolute;left:10px;top:262px;display:grid;gap:5px;pointer-events:none}
+.mchip{display:flex;align-items:center;gap:6px;height:26px;padding:0 9px 0 4px;border-radius:999px;background:rgba(15,23,42,.9);font-size:11px;font-weight:700;color:#e2e8f0;font-variant-numeric:tabular-nums}
+.mchip i{width:18px;height:18px;border-radius:50%;border:2px solid #fff;display:block}
+.mchip.bad{background:rgba(127,29,29,.95)}
+.side{position:absolute;right:10px;top:330px;display:grid;gap:8px}
+.sbtn{width:64px;height:62px;border-radius:16px;background:rgba(15,23,42,.94);color:#f8fafc;display:grid;place-items:center;align-content:center;gap:3px;font-size:9px;font-weight:800;letter-spacing:.04em}
+.sbtn svg{width:22px;height:22px}
+.sbtn.on{background:#1e3a8a}
+.speedo{position:absolute;left:10px;bottom:108px;display:flex;align-items:flex-end;gap:6px;pointer-events:none}
+.gauge{width:74px;height:74px;border-radius:50%;background:#0f172a;border:3px solid #3b82f6;display:grid;place-items:center;align-content:center;line-height:1}
+.gauge b{font-size:28px;font-weight:800;font-variant-numeric:tabular-nums}
+.gauge span{font-size:9px;font-weight:700;color:#94a3b8;margin-top:2px}
+.gauge.over{border-color:#ef4444}
+.limit{position:relative;width:56px;height:56px;border-radius:50%;background:#fff;border:6px solid #dc2626;display:grid;place-items:center;color:#111;font-weight:800;font-size:21px;font-variant-numeric:tabular-nums;margin-bottom:22px}
+.limit::before{content:attr(data-l);position:absolute;top:-17px;left:50%;transform:translateX(-50%);background:#0f172a;color:#fde047;font-size:8.5px;letter-spacing:.06em;padding:2px 6px;border-radius:6px}
+.bottombar{position:absolute;left:10px;right:10px;bottom:10px;height:88px;display:flex;align-items:center;gap:12px;padding:0 12px}
+.eta b{display:block;font-size:24px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.eta span{font-size:10px;color:#94a3b8;font-weight:700;letter-spacing:.08em}
+.vr{width:1px;height:48px;background:#334155}
+.rem b{display:block;font-size:20px;font-weight:800;color:#34d399;line-height:1.05;font-variant-numeric:tabular-nums}
+.rem span{font-size:12px;color:#e2e8f0;font-weight:700;font-variant-numeric:tabular-nums}
+.exit{margin-left:auto;height:52px;padding:0 16px;border-radius:16px;background:#4c1418;border:1.5px solid #b91c1c;color:#fca5a5;font-weight:800;font-size:14px}
+
+/* vote modal */
+.scrim{position:absolute;inset:0;background:rgba(2,6,23,.45);z-index:40;display:grid;place-items:end center;padding:10px;opacity:0;transition:opacity .3s}
+.scrim.show{opacity:1}
+.vote{width:100%;padding:16px 14px 14px;transform:translateY(20px);transition:transform .35s}
+.scrim.show .vote{transform:none}
+.vote .k{font-size:11px;font-weight:800;letter-spacing:.12em;color:#fbbf24}
+.vote h3{margin:6px 0 2px;font-size:19px;font-weight:800}
+.vote .sub{font-size:12px;color:#cbd5e1;font-weight:600}
+.vote .by{display:flex;align-items:center;gap:7px;margin-top:10px;font-size:12px;color:#e2e8f0;font-weight:700}
+.vote .by i{width:16px;height:16px;border-radius:50%;border:2px solid #fff;display:block}
+.tally{display:flex;gap:5px;margin:12px 0 6px}
+.tally span{flex:1;height:8px;border-radius:4px;background:#1e293b;transition:background .3s}
+.tally span.y{background:#10b981}
+.tally span.n{background:#ef4444}
+.vote .tl{font-size:11.5px;color:#94a3b8;font-weight:700;margin-bottom:12px;font-variant-numeric:tabular-nums}
+.vote .btns{display:grid;grid-template-columns:1.4fr 1fr;gap:8px}
+.vote .yes{height:50px;border-radius:15px;background:linear-gradient(180deg,#10b981,#059669);color:#fff;font-weight:800;font-size:15px}
+.vote .no{height:50px;border-radius:15px;background:#1e293b;color:#e2e8f0;font-weight:700;font-size:14px}
+
+/* arrive */
+.ar-sheet{position:absolute;left:10px;right:10px;bottom:10px;padding:18px 14px 14px}
+.ar-sheet .k{font-size:11px;font-weight:800;letter-spacing:.12em;color:#6ee7b7}
+.ar-sheet h3{margin:4px 0 0;font-size:26px;font-weight:800;letter-spacing:-.01em}
+.ar-sheet .place{font-size:13px;color:#cbd5e1;font-weight:600}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:14px 0 10px}
+.stats div{background:#0b1222;border:1px solid #1e293b;border-radius:14px;padding:9px 10px}
+.stats b{display:block;font-size:17px;font-weight:800;font-variant-numeric:tabular-nums}
+.stats span{font-size:10.5px;color:#94a3b8;font-weight:700}
+.arr-convoy{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:#e2e8f0;margin-bottom:12px}
+.arr-convoy .dots{display:flex}
+.arr-convoy .dots i{width:20px;height:20px;border-radius:50%;border:2px solid #0f172a;margin-left:-5px;display:block}
+.arr-convoy .dots i:first-child{margin-left:0}
+.again{width:100%;height:50px;border-radius:15px;background:#2563eb;color:#fff;font-weight:800;font-size:14.5px}
+
+/* plan toast (reuses .toast but lower) */
+.ptoast{top:150px}
+
+/* video (1080×1350) and link-preview (1200×630) frames */
+.vhead,.vcap,.ogcopy,.endcard{display:none}
+.vmode body{background:#ffd21f}
+.vmode .masthead,.vmode .copy,.vmode .tour,.vmode .build,.vmode footer,.vmode .panel-foot,.vmode .panel-note{display:none}
+.vmode .page{max-width:none;padding:0}
+.vmode .hero{display:block}
+.vmode .panel{border-radius:0;box-shadow:none;margin:0;position:relative}
+.vmode-video .panel{width:1080px;height:1350px;padding:0}
+.vmode-video .vhead{display:flex;position:absolute;top:44px;left:60px;align-items:center;gap:14px;font-family:var(--f-display);font-weight:900;font-size:30px;color:#3a0906;z-index:2}
+.vhead img{width:58px;height:58px;border-radius:15px}
+.vmode-video .vcap{display:block;position:absolute;top:120px;left:60px;right:60px;margin:0;font-family:var(--f-display);font-weight:900;font-size:62px;line-height:1.02;letter-spacing:-.025em;color:#3a0906;text-wrap:balance;z-index:2;min-height:128px}
+.vcap.in{animation:capin .5s cubic-bezier(.2,.8,.2,1)}
+@keyframes capin{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.vmode-video .phone-box{position:absolute;left:50%;top:268px;margin:0;transform:translateX(-50%)}
+.vmode-video .endcard{display:grid;position:absolute;inset:0;z-index:5;background:#ffd21f;place-content:center;justify-items:center;text-align:center;color:#3a0906;opacity:0;transition:opacity .6s;pointer-events:none}
+.endcard.show{opacity:1}
+.endcard img{width:220px;height:220px;border-radius:52px;box-shadow:0 30px 60px -20px rgba(80,20,10,.5)}
+.endcard p{margin:0}
+.ec-h{font-family:var(--f-display);font-weight:900;font-size:96px;letter-spacing:-.03em;margin-top:34px!important;line-height:1}
+.ec-s{font-size:38px;font-weight:600;margin-top:14px!important}
+.ec-p{font-family:var(--f-mono);font-size:26px;margin-top:54px!important;letter-spacing:.02em}
+.ec-u{margin-top:22px!important;font-family:var(--f-display);font-weight:900;font-size:44px;background:#3a0906;color:#ffd21f;padding:14px 30px;border-radius:999px}
+.vmode-og .panel{width:1200px;height:630px;padding:0}
+.vmode-og .ogcopy{display:block;position:absolute;left:70px;top:70px;width:600px;color:#3a0906;z-index:2}
+.vmode-og .ogcopy .vhead{display:flex;align-items:center;gap:14px;font-family:var(--f-display);font-weight:900;font-size:30px}
+.og-h{font-family:var(--f-display);font-weight:900;font-size:92px;line-height:.95;letter-spacing:-.035em;margin:34px 0 22px}
+.og-s{font-size:28px;font-weight:600;line-height:1.3;margin:0 0 26px;max-width:16em}
+.og-u{display:inline-block;margin:0;font-family:var(--f-display);font-weight:900;font-size:30px;background:#3a0906;color:#ffd21f;padding:10px 24px;border-radius:999px}
+.vmode-og .phone-box{position:absolute;right:120px;top:40px;margin:0}
+
+@media (prefers-reduced-motion: reduce){
+  .hint::after,.search .caret{animation:none}
+  .map,.sheet,.toast,.scrim,.vote{transition:none}
+}
+</style>
+
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<header class="site-header">
+    <div class="container header-inner">
+      <a class="back-link" href="/" aria-label="Back to the home page"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="m7.83 13 5.6 5.6L12 20l-8-8 8-8 1.43 1.4-5.6 5.6H20v2H7.83Z"/></svg><span>Home</span></a>
+      <a class="brand-link" href="/">
+        <img class="brand-logo" src="/assets/logo-80.png" width="36" height="36" alt="Rōpū Mapi icon">
+        <span class="brand-text">
+          <span class="brand-name">Rōpū Mapi</span>
+          <span class="brand-by">by Aadized</span>
+        </span>
+      </a>
+      <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="primary-nav">Menu</button>
+      <nav class="nav-links" id="primary-nav" data-nav-links aria-label="Primary navigation">
+        <a href="/convoy-mode.html">How it works</a>
+        <a href="/demo.html" aria-current="page">Try the demo</a>
+        <a href="/group-road-trips.html">Group trips</a>
+        <a href="/how-to-drive-in-convoy.html">Driving tips</a>
+        <a href="/privacy.html">Privacy</a>
+        <a href="/zh-tw/" lang="zh-Hant" hreflang="zh-Hant">中文</a>
+        <a class="btn btn-primary btn-sm" href="https://play.google.com/store/apps/details?id=app.ropumapi.convoy" target="_blank" rel="noopener noreferrer">Get on Google Play</a>
+      </nav>
+    </div>
+  </header>
+
+<div class="page">
+
+  <main class="demo-hero" id="main-content">
+    <div class="copy">
+      <p class="demo-eyebrow">Convoy navigation for Android · live in NZ and Taiwan</p>
+      <h1>Road trips with friends, on <span class="mark">one map.</span></h1>
+      <p class="lede">Rōpū Mapi puts a group of cars on one shared route. Each driver sees where the others are, and the app speaks up when someone stops or takes a wrong turn.</p>
+      <p class="name-note"><b>Rōpū Mapi</b> means “group map” in te reo Māori.</p>
+    </div>
+
+    <div class="stage">
+      <div class="panel">
+        <div class="vhead" aria-hidden="true"><img src="/assets/icon-512.png" alt=""><span>Rōpū Mapi</span></div>
+        <p class="vcap" id="vcap" aria-hidden="true"></p>
+        <div class="ogcopy" aria-hidden="true">
+          <div class="vhead"><img src="/assets/icon-512.png" alt=""><span>Rōpū Mapi</span></div>
+          <p class="og-h">Four cars.<br>One map.</p>
+          <p class="og-s">Try the interactive demo: a convoy from Christchurch to Akaroa.</p>
+          <p class="og-u">aadized.com/demo</p>
+        </div>
+        <div class="endcard" id="endcard" aria-hidden="true">
+          <img src="/assets/icon-512.png" alt="">
+          <p class="ec-h">Rōpū Mapi</p>
+          <p class="ec-s">Convoy navigation for group road trips</p>
+          <p class="ec-p">Free on Google Play · New Zealand &amp; Taiwan</p>
+          <p class="ec-u">Try the demo: aadized.com/demo</p>
+        </div>
+        <svg class="contours" viewBox="0 0 400 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true" id="contours"></svg>
+        <div class="phone-box" id="phoneBox">
+          <div class="phone" id="phone">
+            <div class="screen" id="screen" role="application" aria-label="Interactive Rōpū Mapi preview">
+              <div class="notch"></div>
+              <div class="statusbar" id="statusbar"><span id="clock">10:00</span><span class="sys">
+                <svg width="16" height="11" viewBox="0 0 16 11" aria-hidden="true"><path fill="currentColor" d="M1 8h2v3H1zM5 6h2v5H5zM9 3h2v8H9zM13 0h2v11h-2z"/></svg>
+                <span>5G</span>
+                <svg width="22" height="11" viewBox="0 0 22 11" aria-hidden="true"><rect x=".5" y=".5" width="18" height="10" rx="2.5" fill="none" stroke="currentColor"/><rect x="2" y="2" width="13" height="7" rx="1.3" fill="currentColor"/><rect x="19.5" y="3.5" width="2" height="4" rx="1" fill="currentColor"/></svg>
+              </span></div>
+
+              <div class="map" id="map"><svg id="mapSvg" width="900" height="1400" viewBox="0 0 900 1400" aria-hidden="true"><g id="cam"></g></svg></div>
+
+              <!-- PLAN -->
+              <div class="ui" id="uiPlan">
+                <div class="topcard panelc">
+                  <div class="toprow">
+                    <button class="ibtn" aria-label="Menu" data-toast="menu"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
+                    <div class="search"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg><span id="searchTxt">Akaroa</span><i class="caret"></i></div>
+                    <button class="ibtn red" aria-label="Clear" data-toast="clear"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></button>
+                  </div>
+                  <div class="modes" role="group">
+                    <button class="mode on" data-mode="car" data-t="Car">Car</button>
+                    <button class="mode" data-mode="bike" data-t="Bike">Bike</button>
+                    <button class="mode" data-mode="walk" data-t="Walk">Walk</button>
+                  </div>
+                </div>
+                <div class="ptoast toast" id="planToast"><span class="ti"></span><div><b></b><span></span></div></div>
+                <div class="sheet panelc" id="planSheet">
+                  <div class="sheet-h"><span data-t="ROUTE CHOICES">ROUTE CHOICES</span><span id="sheetFrom" style="letter-spacing:0;font-weight:700">Christchurch → Akaroa</span></div>
+                  <div class="routes">
+                    <button class="rc on" data-route="main">
+                      <span class="tag" data-t="FASTEST">FASTEST</span>
+                      <span class="tm" id="rcMainT">1 h 24 <small>min</small></span>
+                      <span class="via" id="rcMainVia">via SH75</span>
+                      <span class="meta"><span id="rcMainEta">11:24 AM</span><span id="rcMainKm">82 km</span></span>
+                    </button>
+                    <button class="rc" data-route="alt">
+                      <span class="row"><span class="tag grey" data-t="OPTION 2">OPTION 2</span><span class="plus">+9 min</span></span>
+                      <span class="tm" id="rcAltT">1 h 33 <small>min</small></span>
+                      <span class="via" id="rcAltVia">via Gebbies Pass</span>
+                      <span class="meta"><span id="rcAltEta">11:33 AM</span><span id="rcAltKm">79 km</span></span>
+                    </button>
+                  </div>
+                  <div class="inforow">
+                    <span class="pill"><svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg><span data-t="Leave now">Leave now</span></span>
+                    <span class="pill">☁ 14°C Akaroa</span>
+                    <span class="pill warn" id="rwPill">⚠ <span data-t="Roadworks on route">Roadworks on route</span></span>
+                  </div>
+                  <div class="summary"><b id="sumT">1 h 24 min</b><span id="sumKm">· 82 km</span><span class="arr" id="sumArr">Arrive by 11:24 AM</span></div>
+                  <div class="chips">
+                    <button class="chip" data-cat="trails" data-t="Trails">Trails</button>
+                    <button class="chip" data-cat="fuel" data-t="Fuel">Fuel</button>
+                    <button class="chip" data-cat="food" data-t="Food">Food</button>
+                    <button class="chip" data-cat="rest" data-t="Rest stops">Rest stops</button>
+                  </div>
+                  <div class="actions">
+                    <button class="act go" id="btnGo"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2 20 21l-8-4-8 4z"/></svg><span data-t="Start Nav">Start Nav</span></button>
+                    <button class="act cv" id="btnConvoy"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="9" r="3.2" fill="currentColor"/><circle cx="16.5" cy="9" r="3.2" fill="currentColor"/><path fill="currentColor" d="M2 19c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5zM12.5 19c.3-2.2-.6-4-2-5.1 1.8-.6 6.5-.9 8.5 1.5 1 1.1 1.2 2.4 1.2 3.6z"/></svg><span data-t="Convoy Trip">Convoy Trip</span></button>
+                    <button class="act pv" id="btnPreview" data-t="Preview">Preview</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- CONVOY -->
+              <div class="ui" id="uiConvoy" hidden>
+                <div class="cv-sheet panelc">
+                  <div class="cv-title"><h3 data-t="Convoy ready">Convoy ready</h3><button class="x" id="cvClose" aria-label="Close"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></button></div>
+                  <div class="cv-code">
+                    <svg class="qr" id="qr" viewBox="0 0 25 25" aria-label="Sample QR code"></svg>
+                    <div>
+                      <div class="lbl" data-t="Share this code with your group">Share this code with your group</div>
+                      <div class="code">KMRTWP</div>
+                      <div class="row2"><button class="smallbtn" id="btnCopy" data-t="Copy">Copy</button><button class="smallbtn" data-toast="share" data-t="Share">Share</button></div>
+                    </div>
+                  </div>
+                  <ul class="members" id="memberList"></ul>
+                  <button class="cv-start" id="btnStartConvoy" disabled data-t="Waiting for others…">Waiting for others…</button>
+                </div>
+              </div>
+
+              <!-- DRIVE -->
+              <div class="ui" id="uiDrive" hidden>
+                <div class="banner">
+                  <div class="turnico" id="turnIco"></div>
+                  <div class="bn-txt">
+                    <div class="bn-act" id="bnAct">Bear right</div>
+                    <div class="bn-dist" id="bnDist">In 850 m</div>
+                    <div class="bn-road" id="bnRoad">Halswell Road (SH75)</div>
+                  </div>
+                </div>
+                <div class="voicebar off" id="voicebar"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg><span id="voiceTxt"></span></div>
+                <div class="toast" id="toast"><span class="ti"></span><div><b></b><span></span></div></div>
+                <div class="mchips" id="mchips"></div>
+                <div class="side">
+                  <button class="sbtn" id="btnAlerts"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fbbf24" d="M12 3a6 6 0 0 0-6 6v4l-2 3h16l-2-3V9a6 6 0 0 0-6-6z"/><circle cx="12" cy="19.5" r="2" fill="#fbbf24"/></svg><span id="alertLvl">MODERATE</span></button>
+                  <button class="sbtn" id="btnRecenter"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="6" fill="none" stroke="#38bdf8" stroke-width="2.4"/><circle cx="12" cy="12" r="2.4" fill="#38bdf8"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="#38bdf8" stroke-width="2.4" stroke-linecap="round"/></svg><span data-t="RECENTER">RECENTER</span></button>
+                  <button class="sbtn on" id="btn3d"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#f87171" d="M3 12 12 7v10z"/><path fill="#e2e8f0" d="M21 12 12 7v10z"/></svg><span id="lbl3d">3D</span></button>
+                  <button class="sbtn" id="btnVoiceIn" aria-label="Voice"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#a78bfa" d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 8.5a5 5 0 0 1 0 7" stroke="#a78bfa" stroke-width="2" fill="none" stroke-linecap="round"/></svg><span id="lblVoiceIn">VOICE OFF</span></button>
+                </div>
+                <div class="speedo">
+                  <div class="gauge" id="gauge"><b id="spd">0</b><span>km/h</span></div>
+                  <div class="limit" id="limit" data-l="LIMIT">50</div>
+                </div>
+                <div class="bottombar panelc">
+                  <div class="eta"><b id="etaT">11:24</b><span data-t="ETA">ETA</span></div>
+                  <div class="vr"></div>
+                  <div class="rem"><b id="remT">84 min</b><span id="remKm">82.0 km</span></div>
+                  <button class="exit" id="btnExit">✕ <span data-t="Exit">Exit</span></button>
+                </div>
+              </div>
+
+              <!-- VOTE -->
+              <div class="scrim" id="voteScrim" hidden>
+                <div class="vote panelc" role="dialog" aria-label="Pit stop vote">
+                  <div class="k" data-t="PIT STOP PROPOSED">PIT STOP PROPOSED</div>
+                  <h3>Hilltop Tavern</h3>
+                  <div class="sub" data-t="Café and lookout above Akaroa Harbour · on route">Café and lookout above Akaroa Harbour · on route</div>
+                  <div class="by"><i style="background:#6d28d9"></i><span id="voteBy">Suggested by Tūī</span></div>
+                  <div class="tally" id="tally"><span></span><span></span><span></span><span></span></div>
+                  <div class="tl" id="tallyTxt"></div>
+                  <div class="btns"><button class="yes" id="voteYes" data-t="Vote yes">Vote yes</button><button class="no" id="voteNo" data-t="No thanks">No thanks</button></div>
+                </div>
+              </div>
+
+              <!-- ARRIVE -->
+              <div class="ui" id="uiArrive" hidden>
+                <div class="ar-sheet panelc">
+                  <div class="k" data-t="DESTINATION REACHED">DESTINATION REACHED</div>
+                  <h3 data-t="You've arrived">You've arrived</h3>
+                  <div class="place">Rue Lavaud, Akaroa</div>
+                  <div class="stats">
+                    <div><b id="stKm">82.0 km</b><span data-t="Distance">Distance</span></div>
+                    <div><b id="stTime">1 h 27</b><span data-t="Drive time">Drive time</span></div>
+                    <div><b id="stStops">1</b><span data-t="Pit stops">Pit stops</span></div>
+                  </div>
+                  <div class="arr-convoy"><span class="dots"><i style="background:#16a34a"></i><i style="background:#6d28d9"></i><i style="background:#2563eb"></i><i style="background:#b45309"></i></span><span id="arrConvoy">Convoy: 4 of 4 arrived</span></div>
+                  <button class="again" id="btnAgain" data-t="Plan another trip">Plan another trip</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel-foot">
+          <button class="tog" id="togAuto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true" id="autoIco"><path fill="currentColor" d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg><span id="autoLbl">Auto-play on</span></button>
+          <button class="tog" id="togVoice" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 8.5a5 5 0 0 1 0 7" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round"/></svg>Voice</button>
+          <button class="tog" id="togLang" aria-pressed="false">EN / 繁中</button>
+        </div>
+        <p class="panel-note">Tap anything on the phone to take over</p>
+      </div>
+    </div>
+
+    <section class="tour" aria-labelledby="tourH">
+      <h2 id="tourH">Christchurch to Akaroa, as a convoy of four</h2>
+      <p>Jump to any part of the trip.</p>
+      <ol id="tour">
+        <li><button class="step" data-go="plan"><span class="n">1</span><span><b>Plan the route</b><span class="d">Pick between two routes, with Akaroa’s weather and NZTA roadworks shown before you leave. Tap Food to see cafés along SH75.</span></span></button></li>
+        <li><button class="step" data-go="convoy"><span class="n">2</span><span><b>Start a convoy</b><span class="d">Share a short code. Friends join with a callsign. Nobody needs an account.</span></span></button></li>
+        <li><button class="step" data-go="drive"><span class="n">3</span><span><b>Drive together</b><span class="d">Spoken turn-by-turn directions, the speed limit, and who is ahead or behind. A warning comes up if someone has stopped.</span></span></button></li>
+        <li><button class="step" data-go="pit"><span class="n">4</span><span><b>Vote on a pit stop</b><span class="d">Anyone can suggest a stop. When the group agrees, it goes onto every car’s route.</span></span></button></li>
+        <li><button class="step" data-go="arrive"><span class="n">5</span><span><b>Arrive</b><span class="d">All four cars reach Rue Lavaud in Akaroa.</span></span></button></li>
+      </ol>
+    </section>
+  </main>
+
+  <section class="build" aria-labelledby="buildH">
+    <div>
+      <h2 id="buildH">How it’s built</h2>
+      <p>Built by one developer using open map data. The app has no paid map licence.</p>
+    </div>
+    <dl>
+      <dt>Maps and routing</dt><dd>MapLibre GL on OpenStreetMap data. Routes come from OSRM, and Valhalla plans the way around closed roads.</dd>
+      <dt>Road notices</dt><dd>The NZ Transport Agency state highway feed. If an active closure sits on your route, the route is re-planned around it.</dd>
+      <dt>Convoy sync</dt><dd>A Node.js and Socket.IO server. Drivers join with a temporary callsign, and the app has no accounts or passwords.</dd>
+      <dt>App shell</dt><dd>One web codebase inside a native Android shell (Capacitor), with native text-to-speech and a foreground location service for screen-off driving.</dd>
+      <dt>Languages</dt><dd>English and Traditional Chinese (Taiwan). Try the 繁中 button under the phone.</dd>
+      <dt>Releases</dt><dd>Built in GitHub Actions. Each release candidate has to pass an emulator soak test before it goes to Google Play.</dd>
+    </dl>
+  </section>
+
+  <p class="demo-note">This is an interactive preview that runs on sample data. The map is a simplified drawing of Canterbury and Banks Peninsula. The speed limits, roadworks, callsigns and convoy code shown here are examples. The real app uses live GPS and open map data.</p>
+</div>
+
+<footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <strong>Rōpū Mapi</strong> &mdash; offered by <strong>Aadized</strong>
+          <div>Support &amp; privacy enquiries: <a href="mailto:support@aadized.com">support@aadized.com</a></div>
+        </div>
+        <nav class="footer-links" aria-label="Footer navigation">
+          <a href="/">Home</a>
+          <a href="/convoy-mode.html">How it works</a>
+          <a href="/demo.html">Interactive demo</a>
+          <a href="/group-road-trips.html">Group trips</a>
+          <a href="/how-to-drive-in-convoy.html">Driving tips</a>
+          <a href="https://play.google.com/store/apps/details?id=app.ropumapi.convoy" target="_blank" rel="noopener noreferrer">Google Play</a>
+          <a href="/privacy.html">Privacy Policy</a>
+          <a href="/terms.html">Terms &amp; Credits</a>
+          <a href="/zh-tw/" lang="zh-Hant" hreflang="zh-Hant">中文</a>
+        </nav>
+      </div>
+      <p class="footer-note">Map data &copy; OpenStreetMap contributors (ODbL). Road event data from NZ Transport Agency Waka Kotahi. Weather by Open-Meteo.com. Rōpū Mapi is free software provided without warranty; always obey road rules and posted signs.</p>
+    </div>
+  </footer>
+
+<script>
+(() => {
+'use strict';
+const MODE = (location.hash || '').replace('#', '');
+const VIDEO = MODE === 'video' || MODE === 'og';
+if (VIDEO) document.documentElement.classList.add('vmode', 'vmode-' + MODE);
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const NS = 'http://www.w3.org/2000/svg';
+const mk = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); if (attrs) for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
+
+/* ---------------- i18n ---------------- */
+let lang = 'en';
+const ZH = {
+  'Car':'汽車','Bike':'自行車','Walk':'步行','ROUTE CHOICES':'路線選擇','FASTEST':'最快','OPTION 2':'選項 2',
+  'Leave now':'現在出發','Roadworks on route':'路線上有道路施工','Trails':'步道','Fuel':'加油站','Food':'餐飲','Rest stops':'休息區',
+  'Start Nav':'開始導航','Convoy Trip':'車隊旅程','Preview':'預覽','Convoy ready':'車隊已就緒','Share this code with your group':'將此代碼分享給您的團隊',
+  'Copy':'複製','Share':'分享','Waiting for others…':'等待其他成員…','Start convoy drive':'開始車隊導航','Leader':'領隊','joined':'已加入','waiting':'等待中',
+  'RECENTER':'置中','ETA':'抵達','Exit':'結束','PIT STOP PROPOSED':'已提議休息站','Café and lookout above Akaroa Harbour · on route':'阿卡羅阿港上方的咖啡館與觀景點 · 位於路線上',
+  'Vote yes':'贊成','No thanks':'不用了','DESTINATION REACHED':'已抵達目的地',"You've arrived":'您已抵達','Distance':'距離','Drive time':'行車時間','Pit stops':'休息站',
+  'Plan another trip':'規劃另一趟旅程','via {r}':'經由 {r}','Arrive by {t}':'預計 {t} 抵達','In {d}':'{d} 後',
+  'Bear right':'靠右行駛','Continue straight':'繼續直行','Keep right':'靠右','Keep left':'靠左','Arrive':'抵達','Pit stop':'休息站',
+  'Starting navigation to {dest}. Follow designated route.':'開始導航至 {dest}。請依照指定路線行駛。',
+  'In {d}, {a} onto {r}.':'{d} 後，{a}進入 {r}。','In {d}, you will arrive at {r}.':'{d} 後，您將抵達 {r}。',
+  'Delays ahead':'前方有延誤','Roadworks · SH75 near Tai Tapu · NZTA':'道路施工 · SH75 Tai Tapu 附近 · NZTA',
+  '⏸️ Member Stopped':'⏸️ 成員已停車','{name} has been stopped for {n} minutes':'{name} 已停車 {n} 分鐘',
+  'Convoy notice: {name} has stopped.':'車隊通知：{name} 已停車。',
+  '🟢 Convoy regrouped — all vehicles in formation.':'🟢 車隊已重新集合——所有車輛隊形良好。','Convoy regrouped. All vehicles in formation.':'車隊已重新集合，所有車輛隊形良好。',
+  'Pit stop proposed: {name}. Waiting for votes.':'已提議休息站：{name}。等待投票。','Suggested by {name}':'由 {name} 提議',
+  '{n} of {m} voted yes':'{m} 人中 {n} 人贊成','Stop added for everyone':'已為所有人加入停靠點','Pit stop approved':'休息站已通過',
+  'Pit stop: {name}':'休息站：{name}','Back on the road shortly':'稍後繼續上路','Pit stop skipped':'未加入休息站','Not enough votes':'票數不足',
+  'Speed Bump Ahead':'前方有減速丘','Caution: Speed bump ahead. Max 30.':'注意：前方有減速丘，限速 30。',
+  'You have arrived at {dest}.':'您已抵達 {dest}。','Convoy: {n} of {m} arrived':'車隊：{m} 輛中 {n} 輛已抵達',
+  '{n} nearby, shown on map':'附近 {n} 個地點，已標示於地圖','Hid those on the map':'已在地圖上隱藏',
+  'This demo plans the car route':'此示範僅規劃汽車路線','This demo drives the fastest route':'此示範以最快路線行駛',
+  'Code copied':'已複製代碼','Sharing opens your phone’s share sheet in the app':'在 App 中會開啟手機的分享選單',
+  'The menu has settings, language and help in the app':'在 App 中，選單包含設定、語言與說明','Search is fixed to Akaroa in this demo':'此示範的搜尋固定為 Akaroa',
+  'ahead':'領先','behind':'落後','stopped':'已停車','Alerts: {l}':'提醒：{l}','MODERATE':'適中','ALL':'全部','MINIMAL':'精簡',
+  'VOICE ON':'語音開','VOICE OFF':'語音關','Exit Navigation?':'結束導航？','Recentered on your car':'已重新置中',
+  '(you)':'（您）','min':'分鐘','LIMIT':'速限','2D':'2D','3D':'3D','Christchurch → Akaroa':'基督城 → 阿卡羅阿'
+};
+const t = (k, v) => { let s = (lang === 'zh' && ZH[k]) || k; if (v) for (const x in v) s = s.split('{' + x + '}').join(v[x]); return s; };
+function applyStatic(){ $$('[data-t]').forEach(e => { e.textContent = t(e.dataset.t); }); $('#limit').dataset.l = t('LIMIT'); $('#sheetFrom').textContent = t('Christchurch → Akaroa'); refreshPlanText(); renderMembers(); }
+
+/* ---------------- geometry helpers ---------------- */
+const P = s => s.trim().split(/\s+/).map(p => p.split(',').map(Number));
+function smooth(a, closed){
+  const n = a.length; let d = 'M' + a[0][0] + ',' + a[0][1];
+  const last = closed ? n : n - 1;
+  for (let i = 0; i < last; i++){
+    const p0 = a[closed ? (i - 1 + n) % n : Math.max(i - 1, 0)], p1 = a[i], p2 = a[(i + 1) % n], p3 = a[closed ? (i + 2) % n : Math.min(i + 2, n - 1)];
+    const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6], c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+    d += 'C' + c1.map(v => v.toFixed(1)) + ' ' + c2.map(v => v.toFixed(1)) + ' ' + p2[0] + ',' + p2[1];
+  }
+  return closed ? d + 'Z' : d;
+}
+const polyD = a => 'M' + a.map(p => p.join(',')).join('L') + 'Z';
+
+/* simplified Canterbury + Banks Peninsula, 1 unit ≈ 75 m */
+const LAND = P(`-900,-900 585,-900 588,60 585,180 600,250 650,262 700,280 760,300 850,360 930,430 985,520 995,600 960,700 900,780 840,840 790,880 740,900 660,880 600,850 540,830 470,850 300,900 100,960 -900,1080`);
+const PLAINS = P(`-900,-900 600,-900 590,190 560,300 520,400 470,480 440,560 470,640 505,700 460,760 300,770 -900,820`);
+const LYTTELTON_H = P(`700,278 668,305 640,330 600,360 560,393 572,408 612,388 660,352 700,318 735,298`);
+const AKAROA_H = P(`790,900 778,822 770,760 755,700 742,660 726,668 720,720 730,790 745,860 752,905`);
+const ELLESMERE = P(`120,905 210,820 300,768 380,746 450,760 505,800 488,832 400,858 260,895 150,925`);
+const FORSYTH = P(`532,702 556,716 570,770 552,806 530,770`);
+const ESTUARY = P(`548,168 580,160 594,200 566,218 548,200`);
+const URBAN = P(`250,40 330,26 430,38 530,70 576,150 562,232 470,252 380,262 300,252 236,204 218,120`);
+const MAIN = P(`335,118 330,150 318,200 316,250 340,300 360,335 377,375 395,430 405,490 425,550 462,612 498,660 522,692 540,688 552,666 568,676 584,652 600,642 615,632 636,646 655,664 678,676 700,694 712,690 722,668 736,652 750,656 762,686 776,738 788,792 798,835`);
+const ALT_HEAD = P(`335,118 345,165 372,215 405,252 452,288 500,322 530,365 548,410 525,450 492,492 462,530 440,560`);
+const ALT = ALT_HEAD.concat(MAIN.slice(MAIN.findIndex(p => p[0] === 462)));
+
+const PLACES = {
+  chch:[335,118], halswell:[318,200], taitapu:[345,318], motu:[405,490], little:[522,692], hilltop:[615,632], barrys:[700,694], duv:[748,654], akaroa:[798,835]
+};
+const LABELS = [
+  {txt:'Christchurch', sub:'Ōtautahi', x:335, y:96, cls:'big', min:0},
+  {txt:'Akaroa', x:820, y:842, cls:'big', min:0, anchor:'start'},
+  {txt:'Little River', x:508, y:706, min:0.25, anchor:'end'},
+  {txt:'Hilltop', x:612, y:618, min:0.9},
+  {txt:'Tai Tapu', x:330, y:322, min:0.6, anchor:'end'},
+  {txt:'Motukarara', x:392, y:492, min:0.6, anchor:'end'},
+  {txt:'Barrys Bay', x:694, y:712, min:0.9, anchor:'end'},
+  {txt:'Duvauchelle', x:756, y:640, min:0.9, anchor:'start'},
+  {txt:'Lyttelton', x:640, y:296, min:0.6},
+  {txt:'Halswell', x:298, y:206, min:1.2, anchor:'end'},
+  {txt:'Te Waihora / Lake Ellesmere', x:300, y:830, cls:'water', min:0},
+  {txt:'Akaroa Harbour', x:742, y:776, cls:'water', min:0.9, rot:-80},
+  {txt:'Lyttelton Harbour', x:640, y:350, cls:'water', min:0.6, rot:-38},
+  {txt:'BANKS PENINSULA', x:860, y:470, cls:'region', min:0},
+  {txt:'Pacific Ocean', x:880, y:960, cls:'water', min:0},
+  {txt:'Pegasus Bay', x:720, y:120, cls:'water', min:0}
+];
+const POIS = {
+  food:[{n:'Little River Café', p:[526,680], i:'☕'},{n:'Hilltop Tavern', p:[622,624], i:'☕'},{n:'Barrys Bay Cheese', p:[704,708], i:'🧀'},{n:'Akaroa waterfront', p:[806,826], i:'☕'}],
+  fuel:[{n:'Tai Tapu', p:[352,326], i:'⛽'},{n:'Little River', p:[516,700], i:'⛽'},{n:'Akaroa', p:[800,846], i:'⛽'}],
+  trails:[{n:'Little River Rail Trail', p:[470,640], i:'🥾'},{n:'Montgomery Park', p:[630,612], i:'🥾'}],
+  rest:[{n:'Motukarara', p:[412,500], i:'🅿'},{n:'Hilltop lookout', p:[606,646], i:'🅿'}]
+};
+const MEMBERS = [
+  {id:'tui', name:'Tūī', col:'#6d28d9', off:0.35, o:[26,-20]},
+  {id:'pukeko', name:'Pūkeko', col:'#2563eb', off:-0.6, o:[-30,8]},
+  {id:'weka', name:'Weka', col:'#b45309', off:-1.2, o:[18,28]}
+];
+
+/* ---------------- build the map ---------------- */
+const cam = $('#cam');
+const defs = mk('defs', null, $('#mapSvg'));
+const clipLand = mk('clipPath', {id:'clipLand'}, defs); mk('path', {d:polyD(LAND)}, clipLand);
+const clipPlains = mk('clipPath', {id:'clipPlains'}, defs); mk('path', {d:polyD(PLAINS)}, clipPlains);
+const clipUrban = mk('clipPath', {id:'clipUrban'}, defs); mk('path', {d:smooth(URBAN, true)}, clipUrban);
+
+mk('rect', {x:-3000, y:-3000, width:7000, height:7000, fill:'#aad3df'}, cam);
+mk('path', {d:polyD(LAND), fill:'#f1eee6'}, cam);
+
+// Canterbury Plains paddocks: a slightly rotated grid, as the plains roads run
+(function paddocks(){
+  const g = mk('g', {'clip-path':'url(#clipPlains)'}, cam);
+  const cols = ['#e4ebd3','#dce6c8','#ebe6cb','#d6e3c3','#eee4c2','#e2ead6','#d9e1bf'];
+  const paths = cols.map(() => []); const belts = [];
+  const a = -14 * Math.PI / 180, ux = Math.cos(a), uy = Math.sin(a);
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const w = 30, h = 23;
+  for (let i = -6; i < 30; i++) for (let j = -10; j < 50; j++){
+    const ox = -120 + i * w * ux - j * h * uy, oy = -160 + i * w * uy + j * h * ux;
+    if (ox < -200 || ox > 640 || oy < -200 || oy > 860) continue;
+    const c = [[ox, oy], [ox + w * ux, oy + w * uy], [ox + w * ux - h * uy, oy + w * uy + h * ux], [ox - h * uy, oy + h * ux]];
+    paths[Math.floor(rnd() * cols.length)].push(polyD(c.map(p => [p[0].toFixed(1), p[1].toFixed(1)])));
+    if (rnd() < .32) belts.push('M' + c[0].map(v => v.toFixed(1)) + 'L' + c[1].map(v => v.toFixed(1)));
+    if (rnd() < .16) belts.push('M' + c[1].map(v => v.toFixed(1)) + 'L' + c[2].map(v => v.toFixed(1)));
+  }
+  paths.forEach((p, k) => mk('path', {d:p.join(''), fill:cols[k], stroke:'#f6f3ea', 'stroke-width':1.2}, g));
+  mk('path', {d:belts.join(''), stroke:'#a8c492', 'stroke-width':2.2, fill:'none', 'stroke-linecap':'round'}, g);
+})();
+
+// Banks Peninsula: two old volcanoes, drawn as contour rings
+(function hills(){
+  const g = mk('g', {'clip-path':'url(#clipLand)'}, cam);
+  const cones = [[748,690,[250,205,160,118,78]],[640,330,[150,112,76]],[870,560,[120,80]]];
+  const fills = ['#e3e8d2','#dbe3c9','#d3ddbf','#cbd7b5','#c4d1ad'];
+  cones.forEach(([cx, cy, rs]) => rs.forEach((r, k) => {
+    const pts = []; for (let q = 0; q < 18; q++){ const an = q / 18 * Math.PI * 2, wob = 1 + Math.sin(q * 2.3 + cx) * .07; pts.push([+(cx + Math.cos(an) * r * wob).toFixed(1), +(cy + Math.sin(an) * r * 0.92 * wob).toFixed(1)]); }
+    const p = mk('path', {d:smooth(pts, true), fill:fills[Math.min(k, fills.length - 1)], stroke:'#bfcca9', 'stroke-width':1, 'vector-effect':'non-scaling-stroke'}, g);
+    if (cx === 748 && k === 0) p.setAttribute('fill', '#e6ead6');
+  }));
+  // the peninsula meets the plains: soften the edge
+  mk('path', {d:polyD(PLAINS), fill:'none', stroke:'#f1eee6', 'stroke-width':10, opacity:.0}, g);
+})();
+
+// Christchurch urban area, Four Avenues and Hagley Park
+mk('path', {d:smooth(URBAN, true), fill:'#e6e1da'}, cam);
+(function streets(){
+  const g = mk('g', {'clip-path':'url(#clipUrban)'}, cam); let d = '';
+  for (let x = 200; x < 600; x += 13) d += `M${x},0L${x + 8},300`;
+  for (let y = 20; y < 300; y += 12) d += `M180,${y}L620,${y - 6}`;
+  mk('path', {d, stroke:'#fbfaf7', 'stroke-width':1, fill:'none', 'vector-effect':'non-scaling-stroke'}, g);
+  mk('path', {d:polyD(P('268,92 300,90 302,150 276,152')), fill:'#c5dfae'}, g);
+  mk('rect', {x:300, y:88, width:72, height:62, fill:'none', stroke:'#f5c98a', 'stroke-width':2.4, 'vector-effect':'non-scaling-stroke'}, g);
+})();
+
+// water
+[LYTTELTON_H, AKAROA_H].forEach(a => mk('path', {d:smooth(a, true), fill:'#aad3df'}, cam));
+[ELLESMERE, FORSYTH, ESTUARY].forEach(a => mk('path', {d:smooth(a, true), fill:'#aad3df', stroke:'#9cc8d6', 'stroke-width':1, 'vector-effect':'non-scaling-stroke'}, cam));
+mk('path', {d:smooth(P('-400,40 0,30 300,10 588,18')), fill:'none', stroke:'#aad3df', 'stroke-width':5, 'vector-effect':'non-scaling-stroke', 'stroke-linecap':'round'}, cam);
+
+// roads
+function road(a, w, col, cas){
+  const d = smooth(a);
+  mk('path', {d, fill:'none', stroke:cas, 'stroke-width':w + 2.4, 'stroke-linecap':'round', 'stroke-linejoin':'round', 'vector-effect':'non-scaling-stroke'}, cam);
+  mk('path', {d, fill:'none', stroke:col, 'stroke-width':w, 'stroke-linecap':'round', 'stroke-linejoin':'round', 'vector-effect':'non-scaling-stroke'}, cam);
+}
+road(P('330,140 260,200 160,290 40,400 -300,700'), 4, '#fcd6a4', '#d9a868');           // SH1
+road(P('320,150 250,230 180,320 120,420 40,560'), 2.6, '#ffffff', '#d4ccbf');         // Lincoln Rd
+road(P('360,140 430,170 520,232 590,282 636,300'), 2.6, '#ffffff', '#d4ccbf');        // to Lyttelton
+road(P('615,632 690,560 790,540 880,610 905,700 850,800'), 2.2, '#ffffff', '#d4ccbf'); // Summit Rd
+road(P('708,700 700,780 720,850'), 2.2, '#ffffff', '#d4ccbf');
+road(P('335,118 420,60 520,40 588,40'), 2.6, '#ffffff', '#d4ccbf');
+road(MAIN, 3.6, '#fcd6a4', '#d9a868');
+road(ALT_HEAD, 2.6, '#ffffff', '#d4ccbf');
+
+// routes
+const altCase = mk('path', {d:smooth(ALT), fill:'none', stroke:'#475569', 'stroke-width':10, 'stroke-linecap':'round', 'stroke-linejoin':'round', 'vector-effect':'non-scaling-stroke', opacity:.0}, cam);
+const altLine = mk('path', {d:smooth(ALT), fill:'none', stroke:'#94a3b8', 'stroke-width':6.5, 'stroke-linecap':'round', 'stroke-linejoin':'round', 'vector-effect':'non-scaling-stroke', opacity:.0}, cam);
+const routeCase = mk('path', {d:smooth(MAIN), fill:'none', stroke:'#065f46', 'stroke-width':12, 'stroke-linecap':'round', 'stroke-linejoin':'round', 'vector-effect':'non-scaling-stroke'}, cam);
+const routeLine = mk('path', {d:smooth(MAIN), fill:'none', stroke:'#10b981', 'stroke-width':8, 'stroke-linecap':'round', 'stroke-linejoin':'round', 'vector-effect':'non-scaling-stroke'}, cam);
+
+// overlays drawn upright: town dots, labels, shields, POIs, members, car
+const gTowns = mk('g', null, cam), gLabels = mk('g', null, cam), gPoi = mk('g', null, cam), gMembers = mk('g', null, cam), gCar = mk('g', null, cam);
+const uprights = []; // {g, x, y, ox, oy, min}
+function upright(parent, x, y, opts = {}){
+  const g = mk('g', null, parent); const u = {g, x, y, ox:opts.ox || 0, oy:opts.oy || 0, min:opts.min || 0, rot:opts.rot || 0}; uprights.push(u); return u;
+}
+Object.entries(PLACES).forEach(([k, p]) => { const u = upright(gTowns, p[0], p[1], {min:k === 'chch' || k === 'akaroa' || k === 'little' ? 0 : .6}); mk('circle', {r:3.6, fill:'#fff', stroke:'#57534e', 'stroke-width':1.6}, u.g); });
+LABELS.forEach(L => {
+  const u = upright(gLabels, L.x, L.y, {min:L.min, rot:L.rot});
+  const tx = mk('text', {class:'mlabel ' + (L.cls || ''), 'text-anchor':L.anchor || 'middle', 'font-size':L.cls === 'big' ? 15 : (L.cls === 'region' ? 10 : 11.5)}, u.g);
+  tx.textContent = L.txt; L.el = tx;
+  if (L.sub){ const s = mk('text', {class:'mlabel', 'text-anchor':'middle', y:14, 'font-size':10.5, 'font-style':'italic', fill:'#6b5f55'}, u.g); s.textContent = L.sub; }
+});
+function shield(x, y, num, min){
+  const u = upright(gLabels, x, y, {min});
+  mk('path', {d:'M-11,-10h22v9c0,7-6,11-11,13c-5-2-11-6-11-13z', fill:'#c81e1e', stroke:'#fff', 'stroke-width':1.6}, u.g);
+  const tx = mk('text', {y:4, 'text-anchor':'middle', 'font-size':num.length > 1 ? 10 : 11, 'font-weight':800, fill:'#fff', 'font-family':'Inter,system-ui,sans-serif'}, u.g); tx.textContent = num;
+}
+shield(392, 420, '75', 0.35); shield(190, 262, '1', 0.35); shield(574, 650, '75', 1.2);
+
+const poiEls = {};
+Object.entries(POIS).forEach(([cat, list]) => {
+  poiEls[cat] = list.map(o => {
+    const u = upright(gPoi, o.p[0], o.p[1], {min:0});
+    u.g.style.display = 'none';
+    mk('path', {d:'M0,0 C-4,-6 -13,-10 -13,-20 a13,13 0 1 1 26,0 C13,-10 4,-6 0,0z', fill:'#0f172a', stroke:'#fbbf24', 'stroke-width':2}, u.g);
+    const e = mk('text', {y:-15.5, 'text-anchor':'middle', 'font-size':13}, u.g); e.textContent = o.i;
+    const n = mk('text', {class:'mlabel', x:16, y:-15, 'font-size':10.5}, u.g); n.textContent = o.n;
+    return u;
+  });
+});
+// pit stop marker
+const pitU = upright(gPoi, 619, 626, {min:0}); pitU.g.style.display = 'none';
+mk('path', {d:'M0,0 C-5,-7 -15,-11 -15,-23 a15,15 0 1 1 30,0 C15,-11 5,-7 0,0z', fill:'#f59e0b', stroke:'#fff', 'stroke-width':2.4}, pitU.g);
+(mk('text', {y:-17.5, 'text-anchor':'middle', 'font-size':15}, pitU.g)).textContent = '☕';
+
+const memU = MEMBERS.map(m => {
+  const u = upright(gMembers, 335, 118, {min:0}); u.m = m;
+  mk('circle', {r:9, fill:m.col, stroke:'#fff', 'stroke-width':3}, u.g);
+  const tx = mk('text', {class:'mlabel', x:13, y:4, 'font-size':11}, u.g); tx.textContent = m.name;
+  return u;
+});
+const carU = upright(gCar, 335, 118, {min:0});
+const carArrow = mk('g', null, carU.g);
+mk('path', {d:'M0,-17 L12,13 L0,6 L-12,13Z', fill:'#f97316', stroke:'#fff', 'stroke-width':2.6, 'stroke-linejoin':'round'}, carArrow);
+mk('path', {d:'M0,-17 L0,6 L-12,13Z', fill:'#ea580c'}, carArrow);
+const youTag = mk('g', null, carU.g);
+mk('rect', {x:-24, y:-44, width:48, height:20, rx:10, fill:'#3b82f6'}, youTag);
+const youTxt = mk('text', {y:-30, 'text-anchor':'middle', 'font-size':11, 'font-weight':800, fill:'#fff', 'font-family':'Inter,system-ui,sans-serif'}, youTag); youTxt.textContent = '(You)';
+
+/* route sampling */
+function sampler(path){
+  const L = path.getTotalLength(), pts = [], step = 2;
+  for (let s = 0; s <= L; s += step){ const q = path.getPointAtLength(s); pts.push([q.x, q.y]); }
+  const q = path.getPointAtLength(L); pts.push([q.x, q.y]);
+  const at = d => { d = Math.max(0, Math.min(L, d)); const f = d / step, i = Math.min(Math.floor(f), pts.length - 2), r = f - i; return [pts[i][0] + (pts[i + 1][0] - pts[i][0]) * r, pts[i][1] + (pts[i + 1][1] - pts[i][1]) * r]; };
+  const near = p => { let best = 0, bd = 1e9; pts.forEach((q, i) => { const dd = (q[0] - p[0]) ** 2 + (q[1] - p[1]) ** 2; if (dd < bd){ bd = dd; best = i; } }); return Math.min(L, best * step); };
+  const rest = d => { d = Math.max(0, Math.min(L, d)); const i = Math.min(Math.floor(d / step) + 1, pts.length - 1), a = at(d); return 'M' + a[0].toFixed(1) + ',' + a[1].toFixed(1) + 'L' + pts.slice(i).map(q => q[0].toFixed(1) + ',' + q[1].toFixed(1)).join('L'); };
+  return {L, at, near, rest};
+}
+const R = sampler(routeLine), RA = sampler(altLine);
+const KM_TOTAL = 82, KM = KM_TOTAL / R.L;             // km per map unit
+const ALT_KM = RA.L * KM;
+const km = {}; Object.keys(PLACES).forEach(k => km[k] = R.near(PLACES[k]) * KM);
+km.akaroa = KM_TOTAL;
+const headingAt = d => { const a = R.at(d - 5), b = R.at(d + 5); return Math.atan2(b[0] - a[0], -(b[1] - a[1])) * 180 / Math.PI; };
+const FULL_D = routeLine.getAttribute('d');
+const setRouteD = d => { routeLine.setAttribute('d', d); routeCase.setAttribute('d', d); };
+
+/* ---------------- state ---------------- */
+const AVG = 58.6;                                  // km/h average used for times
+const START_MIN = 10 * 60;                         // sample start time 10:00 am
+const S = {
+  state:'plan', since:0, auto:true, voice:false, route:'main', cats:{}, preview:null,
+  d:0, v:0, simT:0, tilt:true, alerts:0, fired:{}, pit:null, pitDone:false, stopUntil:0, stops:0,
+  wekaFrozen:false, mem:{tui:0.35, pukeko:0, weka:0}, joined:0, vote:null
+};
+const camS = {x:555, y:470, rot:0, z:.3, ax:450, ay:650};
+const camT = {...camS};
+let now = 0;
+
+const fmtClock = m => { m = Math.round(m) % 1440; const h = Math.floor(m / 60), mm = m % 60, h12 = ((h + 11) % 12) + 1; return h12 + ':' + String(mm).padStart(2, '0') + ' ' + (h < 12 ? 'AM' : 'PM'); };
+const fmtShort = m => fmtClock(m).replace(/ [AP]M$/, '');
+const fmtDur = min => { min = Math.round(min); return min >= 60 ? Math.floor(min / 60) + ' h ' + String(min % 60).padStart(2, '0') + ' ' + t('min') : min + ' ' + t('min'); };
+const durHTML = min => fmtDur(min).replace(new RegExp(' ' + t('min') + '$'), ' <small>' + t('min') + '</small>');
+const fmtDist = k => k >= 1 ? (k >= 10 ? Math.round(k) : k.toFixed(1)) + ' km' : (Math.max(10, Math.round(k * 1000 / 10) * 10)) + ' m';
+
+/* ---------------- speech + toasts ---------------- */
+function speak(text){
+  const vb = $('#voicebar'); $('#voiceTxt').textContent = text; vb.classList.remove('off');
+  clearTimeout(speak.tm); speak.tm = setTimeout(() => vb.classList.add('off'), 5200);
+  if (S.voice && 'speechSynthesis' in window){
+    try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text.replace(/[^\p{L}\p{N}\s.,:;'’!?()\-/]/gu, '')); u.lang = lang === 'zh' ? 'zh-TW' : 'en-NZ'; u.rate = 1.02; speechSynthesis.speak(u); } catch (e) {}
+  }
+}
+function toastIn(el, o, ms){
+  el.className = (el.id === 'planToast' ? 'ptoast ' : '') + 'toast ' + (o.kind || '');
+  el.querySelector('.ti').textContent = o.icon || '';
+  el.querySelector('b').textContent = o.title; el.querySelector(':scope > div > span').textContent = o.body || '';
+  requestAnimationFrame(() => el.classList.add('show'));
+  clearTimeout(el._tm); el._tm = setTimeout(() => el.classList.remove('show'), ms || 4200);
+}
+const toast = o => toastIn(S.state === 'drive' ? $('#toast') : $('#planToast'), o);
+
+/* ---------------- plan screen ---------------- */
+function refreshPlanText(){
+  const mainMin = KM_TOTAL / AVG * 60, altMin = mainMin + 9;
+  const alt = S.route === 'alt';
+  $('#rcMainT').innerHTML = durHTML(mainMin);
+  $('#rcAltT').innerHTML = durHTML(altMin);
+  $('#rcMainVia').textContent = t('via {r}', {r:'SH75'});
+  $('#rcAltVia').textContent = t('via {r}', {r:'Gebbies Pass'});
+  $('#rcMainEta').textContent = fmtClock(START_MIN + mainMin); $('#rcAltEta').textContent = fmtClock(START_MIN + altMin);
+  $('#rcMainKm').textContent = KM_TOTAL + ' km'; $('#rcAltKm').textContent = Math.round(ALT_KM) + ' km';
+  $('#sumT').textContent = fmtDur(alt ? altMin : mainMin);
+  $('#sumKm').textContent = '· ' + (alt ? Math.round(ALT_KM) : KM_TOTAL) + ' km';
+  $('#sumArr').textContent = t('Arrive by {t}', {t:fmtClock(START_MIN + (alt ? altMin : mainMin))});
+  $('#rwPill').hidden = false;
+}
+function setRoute(r){
+  S.route = r;
+  $$('.rc').forEach(b => b.classList.toggle('on', b.dataset.route === r));
+  const alt = r === 'alt';
+  routeLine.setAttribute('stroke', alt ? '#94a3b8' : '#10b981'); routeCase.setAttribute('stroke', alt ? '#475569' : '#065f46');
+  altLine.setAttribute('stroke', alt ? '#10b981' : '#94a3b8'); altCase.setAttribute('stroke', alt ? '#065f46' : '#475569');
+  // selected route drawn on top
+  if (alt){ cam.insertBefore(altCase, gTowns); cam.insertBefore(altLine, gTowns); } else { cam.insertBefore(routeCase, gTowns); cam.insertBefore(routeLine, gTowns); }
+  refreshPlanText();
+}
+function toggleCat(cat, force){
+  const on = force !== undefined ? force : !S.cats[cat]; S.cats[cat] = on;
+  $$('.chip').forEach(c => c.classList.toggle('on', !!S.cats[c.dataset.cat]));
+  poiEls[cat].forEach(u => u.g.style.display = on ? '' : 'none');
+  if (on) toast({icon:'📍', title:t('{n} nearby, shown on map', {n:poiEls[cat].length}), body:poiEls[cat].map((u, i) => POIS[cat][i].n).join(' · ')});
+  else toast({icon:'👁', title:t('Hid those on the map')});
+}
+
+/* ---------------- convoy screen ---------------- */
+function renderMembers(){
+  const ul = $('#memberList'); ul.innerHTML = '';
+  const rows = [{name:'Kea', col:'#16a34a', you:true}].concat(MEMBERS);
+  rows.forEach((m, i) => {
+    const li = document.createElement('li');
+    const joined = m.you || i <= S.joined;
+    if (!joined) li.className = 'wait';
+    li.innerHTML = `<i class="dot" style="background:${m.col}"></i><span>${m.name}${m.you ? ' ' + t('(you)') : ''}</span>` +
+      (m.you ? `<span class="lead">${t('Leader').toUpperCase()}</span>` : '') +
+      `<span class="st">${m.you ? '' : (joined ? '✓ ' + t('joined') : t('waiting'))}</span>`;
+    ul.appendChild(li);
+  });
+  const b = $('#btnStartConvoy'); const all = S.joined >= 3;
+  b.disabled = !all; b.textContent = all ? t('Start convoy drive') : t('Waiting for others…');
+  b.classList.toggle('hint', all && !S.auto);
+}
+(function qr(){
+  const g = $('#qr'); let seed = 482; const rnd = () => (seed = (seed * 48271) % 2147483647) / 2147483647;
+  const finder = (x, y) => { [[0, 7, '#111'], [1, 5, '#fff'], [2, 3, '#111']].forEach(([o, s, c]) => mk('rect', {x:x + o, y:y + o, width:s, height:s, fill:c}, g)); };
+  for (let y = 0; y < 25; y++) for (let x = 0; x < 25; x++){
+    if ((x < 8 && y < 8) || (x > 16 && y < 8) || (x < 8 && y > 16)) continue;
+    if (rnd() < .48) mk('rect', {x, y, width:1, height:1, fill:'#111'}, g);
+  }
+  finder(0, 0); finder(18, 0); finder(0, 18);
+})();
+
+/* ---------------- state transitions ---------------- */
+function show(id){ ['uiPlan', 'uiConvoy', 'uiDrive', 'uiArrive'].forEach(x => $('#' + x).hidden = x !== id); }
+function setTour(name){
+  const order = ['plan', 'convoy', 'drive', 'pit', 'arrive'];
+  const idx = order.indexOf(name);
+  $$('.step').forEach((b, i) => { if (i === idx) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current'); b.classList.toggle('done', i < idx); });
+}
+function hints(){
+  $$('.screen .hint').forEach(e => { if (e.id !== 'btnStartConvoy') e.classList.remove('hint'); });
+  if (S.auto) { $('#btnStartConvoy').classList.remove('hint'); return; }
+  if (S.state === 'plan') $('#btnConvoy').classList.add('hint');
+  if (S.state === 'convoy') renderMembers();
+  if (S.vote) $('#voteYes').classList.add('hint');
+  if (S.state === 'arrive') $('#btnAgain').classList.add('hint');
+}
+function enter(state){ S.state = state; S.since = now; $$('.toast').forEach(x => x.classList.remove('show')); hints(); }
+
+function goPlan(){
+  closeVote(true);
+  enter('plan'); show('uiPlan'); setTour('plan');
+  S.solo = false; $('#arrConvoy').parentElement.hidden = false; $('#mchips').hidden = false;
+  S.d = 0; S.v = 0; S.simT = 0; S.fired = {}; S.pit = null; S.pitDone = false; S.stops = 0; S.stopUntil = 0; S.wekaFrozen = false; S.joined = 0; S.preview = null;
+  Object.keys(S.cats).forEach(c => toggleCatSilent(c, false));
+  pitU.g.style.display = 'none';
+  setRoute('main'); altLine.setAttribute('opacity', 1); altCase.setAttribute('opacity', 1);
+  $('#planSheet').classList.remove('lowered');
+  setRouteD(FULL_D);
+  $('#map').classList.remove('tilt'); youTag.style.display = '';
+  gMembers.style.display = 'none';
+  Object.assign(camT, {x:557, y:476, rot:0, z:.34, ax:450, ay:690});
+  $('#clock').textContent = fmtShort(START_MIN);
+}
+function toggleCatSilent(c, on){ S.cats[c] = on; poiEls[c].forEach(u => u.g.style.display = on ? '' : 'none'); $$('.chip').forEach(x => x.classList.toggle('on', !!S.cats[x.dataset.cat])); }
+
+function goConvoy(){
+  closeVote(true);
+  if (S.state !== 'plan') goPlan();
+  setRoute('main');
+  enter('convoy'); show('uiConvoy'); setTour('convoy');
+  S.joined = 0; renderMembers();
+  altLine.setAttribute('opacity', 0); altCase.setAttribute('opacity', 0);
+  gMembers.style.display = '';
+  memU.forEach(u => { u.g.style.opacity = 0; u.x = PLACES.chch[0]; u.y = PLACES.chch[1]; u.ox = u.m.o[0]; u.oy = u.m.o[1]; });
+  Object.assign(camT, {x:338, y:126, rot:0, z:1.9, ax:450, ay:600});
+}
+function startDrive(fromKm, solo){
+  closeVote(true);
+  const wasAlt = S.route === 'alt'; if (wasAlt) setRoute('main');
+  altLine.setAttribute('opacity', 0); altCase.setAttribute('opacity', 0);
+  S.solo = !!solo;
+  enter('drive'); show('uiDrive'); setTour('drive');
+  if (wasAlt) toast({icon:'ℹ️', title:t('This demo drives the fastest route')});
+  S.joined = 3; S.d = (fromKm || 0) / KM; S.v = fromKm ? 80 : 0; S.simT = (fromKm || 0) / AVG * 3600;
+  S.fired = {}; S.pit = null; S.pitDone = false; S.stopUntil = 0; S.wekaFrozen = false; S.stops = 0;
+  if (fromKm){ Object.assign(S.fired, {start:1, rw:1, wstop:1, wgo:1, regroup:1}); }
+  S.mem = {tui:(fromKm || 0) + .35, pukeko:(fromKm || 0) - .6, weka:(fromKm || 0) - 1.2};
+  memU.forEach(u => { u.g.style.opacity = 1; u.ox = 0; u.oy = 0; });
+  gMembers.style.display = S.solo ? 'none' : ''; $('#mchips').hidden = S.solo;
+  pitU.g.style.display = 'none';
+  Object.keys(S.cats).forEach(c => toggleCatSilent(c, false));
+  youTag.style.display = 'none';
+  $('#map').classList.toggle('tilt', S.tilt);
+  $('#voicebar').classList.add('off');
+  camS.z = Math.max(camS.z, 1.2);
+  updateHud(true);
+}
+function goPit(){ startDrive(km.hilltop - 7.1); setTour('pit'); }
+function arrive(natural){
+  closeVote(true);
+  enter('arrive'); show('uiArrive'); setTour('arrive');
+  $('#map').classList.remove('tilt');
+  S.d = R.L;
+  setRouteD(FULL_D);
+  $('#stKm').textContent = KM_TOTAL.toFixed(1) + ' km';
+  const mins = natural ? S.simT / 60 : KM_TOTAL / AVG * 60 + 15;
+  $('#stTime').textContent = fmtDur(mins);
+  $('#stStops').textContent = String(natural ? S.stops : 1);
+  $('#arrConvoy').textContent = t('Convoy: {n} of {m} arrived', {n:4, m:4});
+  memU.forEach((u, i) => { u.x = PLACES.akaroa[0]; u.y = PLACES.akaroa[1]; u.ox = [-26, 24, -6][i]; u.oy = [16, 18, 34][i]; u.g.style.opacity = 1; });
+  gMembers.style.display = S.solo ? 'none' : ''; $('#arrConvoy').parentElement.hidden = !!S.solo;
+  youTag.style.display = '';
+  Object.assign(camT, {x:796, y:832, rot:0, z:2.3, ax:450, ay:660});
+  speak(t('You have arrived at {dest}.', {dest:'Akaroa'}));
+}
+
+/* ---------------- pit stop vote ---------------- */
+function openVote(){
+  S.vote = {t0:now, yes:1, no:0, mine:null, done:false};
+  const sc = $('#voteScrim'); sc.hidden = false; requestAnimationFrame(() => sc.classList.add('show'));
+  $('#voteBy').textContent = t('Suggested by {name}', {name:'Tūī'});
+  speak(t('Pit stop proposed: {name}. Waiting for votes.', {name:'Hilltop Tavern'}));
+  setTour('pit'); renderTally(); hints();
+}
+function renderTally(){
+  const v = S.vote; if (!v) return;
+  const sp = $$('#tally span'); sp.forEach((s, i) => s.className = i < v.yes ? 'y' : (i < v.yes + v.no ? 'n' : ''));
+  $('#tallyTxt').textContent = t('{n} of {m} voted yes', {n:v.yes, m:4});
+}
+function castVote(yes){
+  const v = S.vote; if (!v || v.mine !== null) return;
+  v.mine = yes; if (yes) v.yes++; else v.no++; renderTally();
+  $('#voteYes').classList.remove('hint');
+}
+function resolveVote(){
+  const v = S.vote; if (!v || v.done) return; v.done = true;
+  const pass = v.yes >= 3;
+  S.pit = pass ? 'approved' : 'rejected';
+  closeVote();
+  if (pass){
+    pitU.g.style.display = '';
+    toast({icon:'✅', title:t('Pit stop approved'), body:t('Stop added for everyone') + ' · Hilltop Tavern', kind:'good'});
+  } else toast({icon:'✖', title:t('Pit stop skipped'), body:t('Not enough votes')});
+}
+function closeVote(instant){
+  const sc = $('#voteScrim'); sc.classList.remove('show'); S.vote = null;
+  if (instant) sc.hidden = true; else setTimeout(() => { if (!S.vote) sc.hidden = true; }, 320);
+}
+
+/* ---------------- drive simulation ---------------- */
+function limitAt(k){
+  const near = (p, r) => Math.abs(k - km[p]) < r;
+  if (k > KM_TOTAL - 1.4 && k < KM_TOTAL - 0.9) return 30;
+  if (k < 4) return 50; if (k < 7) return 80;
+  if (near('taitapu', 0.8)) return 70;
+  if (near('little', 1.0) || near('duv', 0.8) || k > KM_TOTAL - 2.6) return 50;
+  if (near('hilltop', 0.5)) return 50;
+  if (k > km.little && k < km.barrys + 2) return 80;
+  return 100;
+}
+const MANEUVERS = () => [
+  {k:km.halswell, type:'slight-right', act:'Bear right', road:'Halswell Road (SH75)'},
+  {k:km.taitapu, type:'straight', act:'Continue straight', road:'Christchurch Akaroa Road'},
+  {k:km.little, type:'straight', act:'Continue straight', road:'Little River'},
+  {k:km.hilltop, type:'slight-right', act:'Keep right', road:'Christchurch Akaroa Road'},
+  {k:km.duv + .4, type:'slight-right', act:'Keep right', road:'SH75 · Akaroa'},
+  {k:KM_TOTAL, type:'arrive', act:'Arrive', road:'Rue Lavaud, Akaroa'}
+];
+const ICONS = {
+  'straight':'<svg viewBox="0 0 24 24"><path d="M12 21V5M6 10l6-6 6 6" stroke="#34d399" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  'slight-right':'<svg viewBox="0 0 24 24"><path d="M9 21v-7c0-2 1-3.2 2.4-4.6L17 4M11 4h6v6" stroke="#34d399" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  'arrive':'<svg viewBox="0 0 24 24"><path d="M12 22s7-6.4 7-12a7 7 0 1 0-14 0c0 5.6 7 12 7 12z" fill="#34d399"/><circle cx="12" cy="10" r="2.6" fill="#0f172a"/></svg>',
+  'pit':'<svg viewBox="0 0 24 24"><path d="M12 22s7-6.4 7-12a7 7 0 1 0-14 0c0 5.6 7 12 7 12z" fill="#f59e0b"/><circle cx="12" cy="10" r="2.6" fill="#0f172a"/></svg>'
+};
+let lastIco = '';
+function nextManeuver(k){
+  const list = MANEUVERS();
+  if (S.pit === 'approved' && !S.pitDone) list.push({k:km.hilltop - 0.02, type:'pit', act:'Pit stop', road:'Hilltop Tavern'});
+  list.sort((a, b) => a.k - b.k);
+  return list.find(m => m.k > k + 0.01) || list[list.length - 1];
+}
+function updateHud(force){
+  const k = S.d * KM, m = nextManeuver(k), dist = Math.max(0, m.k - k);
+  if (lastIco !== m.type || force){ $('#turnIco').innerHTML = ICONS[m.type]; lastIco = m.type; }
+  $('#bnAct').textContent = t(m.act); $('#bnDist').textContent = t('In {d}', {d:fmtDist(dist)}); $('#bnRoad').textContent = m.road;
+  const lim = limitAt(k); $('#limit').textContent = lim;
+  const v = Math.round(S.v); $('#spd').textContent = v; $('#gauge').classList.toggle('over', v > lim + 3);
+  const remKm = Math.max(0, KM_TOTAL - k), remMin = remKm / AVG * 60 + (S.pit === 'approved' && !S.pitDone ? 15 : 0);
+  const clock = START_MIN + S.simT / 60;
+  $('#etaT').textContent = fmtShort(clock + remMin); $('#remT').textContent = fmtDur(remMin); $('#remKm').textContent = remKm.toFixed(1) + ' km';
+  $('#clock').textContent = fmtShort(clock);
+  // member chips
+  const box = $('#mchips'); let html = '';
+  MEMBERS.forEach(mm => {
+    const diff = S.mem[mm.id] - k, stopped = mm.id === 'weka' && S.wekaFrozen;
+    const txt = (diff >= 0 ? '+' : '−') + fmtDist(Math.abs(diff)) + ' ' + t(diff >= 0 ? 'ahead' : 'behind') + (stopped ? ' · ' + t('stopped') : '');
+    html += `<div class="mchip ${stopped ? 'bad' : ''}"><i style="background:${mm.col}"></i>${mm.name} ${txt}</div>`;
+  });
+  box.innerHTML = html;
+  // spoken prompt at ~800 m before each maneuver
+  if (dist < 0.85 && dist > 0.15 && !S.fired['m' + m.k.toFixed(2)]){
+    S.fired['m' + m.k.toFixed(2)] = 1;
+    if (m.type === 'arrive') speak(t('In {d}, you will arrive at {r}.', {d:fmtDist(dist), r:'Akaroa'}));
+    else if (m.type !== 'pit') speak(t('In {d}, {a} onto {r}.', {d:fmtDist(Math.round(dist * 10) / 10), a:t(m.act).toLowerCase(), r:m.road}));
+  }
+}
+function driveStep(dt){
+  const k = S.d * KM;
+  let target = limitAt(k) * 0.96;
+  if (S.vote) target = Math.min(target, 55);
+  // pit stop: slow down and park at Hilltop
+  if (S.pit === 'approved' && !S.pitDone){
+    const to = km.hilltop - k;
+    if (to < 1.0) target = Math.min(target, Math.max(0, to * 60));
+    if (to <= 0.03 && !S.stopUntil){ S.stopUntil = now + (VIDEO ? 2.2 : 3.2); S.v = 0; S.stops++; toast({icon:'☕', title:t('Pit stop: {name}', {name:'Hilltop Tavern'}), body:t('Back on the road shortly'), kind:'good'}); }
+  }
+  if (S.stopUntil){
+    target = 0; S.v = 0; S.simT += dt * 280; // 15 minutes pass during the stop
+    if (now > S.stopUntil){ S.stopUntil = 0; S.pitDone = true; pitU.g.style.display = 'none'; }
+  } else {
+    S.v += (target - S.v) * Math.min(1, dt * 1.3);
+    const T = (VIDEO ? 150 : 90) * (S.vote ? 0.45 : 1); // one real second = 90 seconds of driving (150 in the video)
+    S.d += S.v / 3600 * T * dt / KM; S.simT += dt * T;
+  }
+  const k2 = S.d * KM;
+  // events
+  const once = (id, cond, fn) => { if (!S.fired[id] && cond){ S.fired[id] = 1; fn(); } };
+  once('start', k2 > 0.02, () => speak(t('Starting navigation to {dest}. Follow designated route.', {dest:'Akaroa'})));
+  once('rw', k2 > 10, () => { toast({icon:'🚧', title:t('Delays ahead'), body:t('Roadworks · SH75 near Tai Tapu · NZTA'), kind:'warn'}); speak(t('Delays ahead')); });
+  if (!S.solo){
+  once('wstop', k2 > 20, () => { S.wekaFrozen = true; toast({icon:'⏸️', title:t('⏸️ Member Stopped').replace('⏸️ ', ''), body:t('{name} has been stopped for {n} minutes', {name:'Weka', n:3}), kind:'bad'}); speak(t('Convoy notice: {name} has stopped.', {name:'Weka'})); });
+  once('wgo', k2 > 31, () => { S.wekaFrozen = false; });
+  once('regroup', S.fired.wgo && !S.wekaFrozen && (k2 - S.mem.weka) < 1.5, () => { toast({icon:'🟢', title:t('🟢 Convoy regrouped — all vehicles in formation.').replace('🟢 ', ''), kind:'good'}); speak(t('Convoy regrouped. All vehicles in formation.')); });
+  once('pit', k2 > km.hilltop - 7 && !S.pit, () => openVote());
+  }
+  once('bump', k2 > KM_TOTAL - 1.7, () => { toast({icon:'⚠️', title:t('Speed Bump Ahead'), body:t('Caution: Speed bump ahead. Max 30.'), kind:'warn'}); speak(t('Caution: Speed bump ahead. Max 30.')); });
+  // members follow
+  // everyone pulls in at Hilltop for an approved pit stop; otherwise keep the usual spacing
+  const parking = S.pit === 'approved' && !S.pitDone && k2 > km.hilltop - 1.5;
+  const tgt = parking ? {tui:km.hilltop + .05, pukeko:km.hilltop - .05, weka:km.hilltop - .12} : {tui:k2 + .35, pukeko:k2 - .6, weka:k2 - 1.2};
+  const moved = parking ? 0 : k2 - k;
+  for (const id in tgt){
+    if (id === 'weka' && S.wekaFrozen) continue;
+    // drive at the convoy's pace, then close the gap
+    const rate = parking ? 1.6 : (id === 'weka' && S.fired.wgo && !S.fired.regroup ? 1.2 : 0.9);
+    S.mem[id] += moved + (tgt[id] - S.mem[id]) * Math.min(1, dt * rate);
+  }
+  if (k2 >= KM_TOTAL - 0.02){ S.d = R.L; arrive(true); }
+}
+
+/* ---------------- render loop ---------------- */
+let lastT = performance.now(), hudTick = 0;
+function lerpAng(a, b, f){ let d = ((b - a + 540) % 360) - 180; return a + d * f; }
+function frame(ts){
+  const dt = Math.min(0.05, (ts - lastT) / 1000); lastT = ts;
+  if (!window.__manualClock) tick(dt);
+  requestAnimationFrame(frame);
+}
+window.__step = dt => tick(dt);
+function tick(dt){
+  now += dt;
+  autoplay();
+  if (VIDEO) videoTick();
+  if (S.state === 'convoy'){
+    const e = now - S.since;
+    const j = e > 2.6 ? 3 : e > 1.8 ? 2 : e > 1.0 ? 1 : 0;
+    if (j !== S.joined){ S.joined = j; renderMembers(); }
+    memU.forEach((u, i) => u.g.style.opacity = i < S.joined ? 1 : 0);
+  }
+  if (S.preview){
+    const p = Math.min(1, (now - S.preview) / 5);
+    const d = R.L * (p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2);
+    const q = R.at(d); Object.assign(camT, {x:q[0], y:q[1], rot:headingAt(d), z:1.4, ax:450, ay:760});
+    carU.x = q[0]; carU.y = q[1]; carArrow.setAttribute('transform', 'rotate(' + 0 + ')');
+    if (p >= 1){ S.preview = null; $('#planSheet').classList.remove('lowered'); Object.assign(camT, {x:557, y:476, rot:0, z:.34, ax:450, ay:690}); carU.x = PLACES.chch[0]; carU.y = PLACES.chch[1]; }
+  }
+  if (S.state === 'drive'){
+    driveStep(dt);
+    const p = R.at(S.d), h = headingAt(S.d);
+    carU.x = p[0]; carU.y = p[1];
+    Object.assign(camT, {x:p[0], y:p[1], rot:h, z:S.tilt ? 5 : 5.6, ax:450, ay:920});
+    setRouteD(R.rest(S.d));
+    memU.forEach(u => { const q = R.at(Math.max(0, Math.min(KM_TOTAL, S.mem[u.m.id])) / KM); u.x = q[0]; u.y = q[1]; });
+    if (S.vote){
+      const v = S.vote, e = now - v.t0;
+      const others = e > 2.6 ? 2 : e > 1.2 ? 1 : 0;           // Pūkeko then Weka vote yes
+      if (1 + others + (v.mine === true ? 1 : 0) !== v.yes && !v.done){ v.yes = 1 + others + (v.mine === true ? 1 : 0); renderTally(); }
+      if (!v.done && ((v.mine !== null && e > 3.0) || e > 9)) resolveVote();
+    }
+    hudTick += dt; if (hudTick > .12){ hudTick = 0; updateHud(); }
+  } else if (S.state === 'plan' && !S.preview){
+    carU.x = PLACES.chch[0]; carU.y = PLACES.chch[1];
+  } else if (S.state === 'convoy'){
+    carU.x = PLACES.chch[0]; carU.y = PLACES.chch[1];
+  } else if (S.state === 'arrive'){
+    carU.x = PLACES.akaroa[0]; carU.y = PLACES.akaroa[1];
+  }
+  // camera
+  const f = 1 - Math.exp(-dt * (S.state === 'drive' ? 6 : 3.2));
+  camS.x += (camT.x - camS.x) * f; camS.y += (camT.y - camS.y) * f; camS.z += (camT.z - camS.z) * f;
+  camS.ax += (camT.ax - camS.ax) * f; camS.ay += (camT.ay - camS.ay) * f; camS.rot = lerpAng(camS.rot, camT.rot, f);
+  cam.setAttribute('transform', `translate(${camS.ax.toFixed(1)},${camS.ay.toFixed(1)}) rotate(${(-camS.rot).toFixed(2)}) scale(${camS.z.toFixed(4)}) translate(${(-camS.x).toFixed(1)},${(-camS.y).toFixed(1)})`);
+  const inv = 1 / camS.z, r = camS.rot.toFixed(2);
+  for (const u of uprights){
+    if (u.min > camS.z){ if (u.g.style.visibility !== 'hidden') u.g.style.visibility = 'hidden'; continue; }
+    if (u.g.style.visibility) u.g.style.visibility = '';
+    u.g.setAttribute('transform', `translate(${u.x.toFixed(1)},${u.y.toFixed(1)}) rotate(${u.rot ? (+r + u.rot) : r}) scale(${inv.toFixed(4)}) translate(${u.ox},${u.oy})`);
+  }
+  // car arrow points along the road in map space (screen-up while driving)
+  const carH = S.state === 'drive' ? headingAt(S.d) : (S.preview ? headingAt(R.L * Math.min(1, (now - S.preview) / 5)) : (S.state === 'arrive' ? 150 : 170));
+  carArrow.setAttribute('transform', `rotate(${(carH - camS.rot).toFixed(1)}) scale(${S.state === 'drive' ? 1.45 : 1})`);
+}
+
+/* ---------------- autoplay ---------------- */
+function setAuto(on){
+  S.auto = on; const b = $('#togAuto'); b.setAttribute('aria-pressed', on);
+  $('#autoLbl').textContent = on ? 'Auto-play on' : 'Auto-play off';
+  $('#autoIco').innerHTML = on ? '<path fill="currentColor" d="M7 5h4v14H7zM13 5h4v14h-4z"/>' : '<path fill="currentColor" d="M7 4.5v15l12.5-7.5z"/>';
+  hints(); renderMembers();
+}
+function autoplay(){
+  if (!S.auto) return;
+  const e = now - S.since;
+  if (S.state === 'plan' && !S.preview){
+    if (e > (VIDEO ? 1.2 : 1.8) && !S.cats.food && !S.fired.autoFood){ S.fired.autoFood = 1; toggleCat('food', true); }
+    if (e > (VIDEO ? 3.6 : 5.2)) goConvoy();
+  } else if (S.state === 'convoy'){
+    if (e > (VIDEO ? 3.6 : 4.4)) startDrive(0);
+  } else if (S.state === 'drive'){
+    if (S.vote && S.vote.mine === null && now - S.vote.t0 > (VIDEO ? 1.1 : 1.8)) castVote(true);
+  } else if (S.state === 'arrive'){
+    if (!VIDEO && e > 7) goPlan();
+  }
+}
+
+/* ---------------- wiring ---------------- */
+$('#screen').addEventListener('pointerdown', () => { if (S.auto) setAuto(false); }, true);
+$$('.mode').forEach(b => b.addEventListener('click', () => {
+  if (b.dataset.mode !== 'car') toast({icon:'ℹ️', title:t('This demo plans the car route')});
+}));
+$$('[data-toast]').forEach(b => b.addEventListener('click', () => {
+  const m = {menu:'The menu has settings, language and help in the app', clear:'Search is fixed to Akaroa in this demo', share:'Sharing opens your phone’s share sheet in the app'}[b.dataset.toast];
+  toast({icon:'ℹ️', title:t(m)});
+}));
+$$('.rc').forEach(b => b.addEventListener('click', () => setRoute(b.dataset.route)));
+$$('.chip').forEach(b => b.addEventListener('click', () => toggleCat(b.dataset.cat)));
+$('#btnGo').addEventListener('click', () => startDrive(0, true));
+$('#btnConvoy').addEventListener('click', goConvoy);
+$('#btnPreview').addEventListener('click', () => { if (S.preview) return; S.preview = now; $('#planSheet').classList.add('lowered'); });
+$('#cvClose').addEventListener('click', goPlan);
+$('#btnCopy').addEventListener('click', () => {
+  const done = () => toast({icon:'📋', title:t('Code copied'), body:'KMRTWP'});
+  try { navigator.clipboard.writeText('KMRTWP').then(done, done); } catch (e) { done(); }
+});
+$('#btnStartConvoy').addEventListener('click', () => startDrive(0));
+$('#voteYes').addEventListener('click', () => castVote(true));
+$('#voteNo').addEventListener('click', () => castVote(false));
+$('#btnAgain').addEventListener('click', goPlan);
+$('#btnExit').addEventListener('click', goPlan);
+$('#btn3d').addEventListener('click', () => { S.tilt = !S.tilt; $('#map').classList.toggle('tilt', S.tilt && S.state === 'drive'); $('#lbl3d').textContent = S.tilt ? '3D' : '2D'; $('#btn3d').classList.toggle('on', S.tilt); });
+$('#btnRecenter').addEventListener('click', () => toast({icon:'🎯', title:t('Recentered on your car')}));
+$('#btnAlerts').addEventListener('click', () => { S.alerts = (S.alerts + 1) % 3; const l = ['MODERATE', 'ALL', 'MINIMAL'][S.alerts]; $('#alertLvl').textContent = t(l); toast({icon:'🔔', title:t('Alerts: {l}', {l:t(l)})}); });
+function setVoice(on){
+  S.voice = on; $('#togVoice').setAttribute('aria-pressed', on); $('#lblVoiceIn').textContent = t(on ? 'VOICE ON' : 'VOICE OFF'); $('#btnVoiceIn').classList.toggle('on', on);
+  if (!on && 'speechSynthesis' in window) try { speechSynthesis.cancel(); } catch (e) {}
+  if (on) speak(lang === 'zh' ? '語音導航已開啟。' : 'Voice guidance on.');
+}
+$('#togVoice').addEventListener('click', () => setVoice(!S.voice));
+$('#btnVoiceIn').addEventListener('click', () => setVoice(!S.voice));
+$('#togLang').addEventListener('click', () => {
+  lang = lang === 'en' ? 'zh' : 'en'; $('#togLang').setAttribute('aria-pressed', lang === 'zh');
+  youTxt.textContent = lang === 'zh' ? '(您)' : '(You)';
+  $('#lblVoiceIn').textContent = t(S.voice ? 'VOICE ON' : 'VOICE OFF'); $('#alertLvl').textContent = t(['MODERATE', 'ALL', 'MINIMAL'][S.alerts]);
+  applyStatic(); if (S.state === 'drive') updateHud(true);
+});
+$('#togAuto').addEventListener('click', () => { setAuto(!S.auto); if (S.auto) S.since = now; });
+$$('.step').forEach(b => b.addEventListener('click', () => {
+  setAuto(false);
+  if (window.innerWidth <= 900) $('.panel').scrollIntoView({behavior:'smooth', block:'start'});
+  const g = b.dataset.go;
+  if (g === 'plan') goPlan(); else if (g === 'convoy') goConvoy(); else if (g === 'drive') startDrive(0); else if (g === 'pit') goPit(); else if (g === 'arrive'){ if (S.state === 'plan' || S.state === 'convoy') { S.simT = 0; } arrive(); }
+}));
+
+/* phone scaling */
+const box = $('#phoneBox'), phone = $('#phone');
+function fit(){
+  if (VIDEO){ const k = MODE === 'og' ? .74 : 1.36; phone.style.transform = `scale(${k})`; box.style.width = 380 * k + 'px'; box.style.height = 780 * k + 'px'; return; }
+  const w = box.parentElement.clientWidth - 36;
+  let k = Math.min(w / 380, 1.05);
+  if (window.innerHeight >= 700 && window.innerWidth > 900) k = Math.min(k, (window.innerHeight - 120) / 780);
+  k = Math.max(k, .5);
+  phone.style.transform = `scale(${k})`; box.style.width = 380 * k + 'px'; box.style.height = 780 * k + 'px';
+}
+new ResizeObserver(fit).observe(box.parentElement); window.addEventListener('resize', fit); fit();
+
+/* decorative contour lines on the yellow panel */
+(function contours(){
+  const g = $('#contours'); let seed = 3; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  [[80, 140], [330, 620], [360, 120]].forEach(([cx, cy]) => {
+    for (let r = 30; r < 300; r += 26){
+      const pts = []; for (let q = 0; q < 14; q++){ const a = q / 14 * Math.PI * 2, w = 1 + (rnd() - .5) * .16; pts.push([+(cx + Math.cos(a) * r * w).toFixed(1), +(cy + Math.sin(a) * r * .8 * w).toFixed(1)]); }
+      mk('path', {d:smooth(pts, true), fill:'none', stroke:'currentColor', 'stroke-width':1.3}, g);
+    }
+  });
+})();
+
+/* ---------------- video mode: captions and end card ---------------- */
+let capNow = '';
+function captionFor(){
+  if (S.state === 'plan') return S.fired.autoFood ? 'Plan once. Every car gets the same route.' : 'Road trip in more than one car?';
+  if (S.state === 'convoy') return 'Share one code. Friends join in seconds.';
+  if (S.state === 'drive'){
+    if (S.vote || (S.pit === 'approved' && !S.pitDone)) return 'Anyone can suggest a stop. The group votes.';
+    if (S.fired.wstop && !S.fired.regroup) return 'If a car stops, the whole convoy knows.';
+    if (S.fired.wstop) return 'Everyone back together. On to Akaroa.';
+    return 'Spoken directions on every phone.';
+  }
+  return 'Four cars. One route. Everyone arrives.';
+}
+function videoTick(){
+  if (MODE !== 'video') return;
+  const c = captionFor();
+  if (c !== capNow){
+    capNow = c; const el = $('#vcap');
+    el.classList.remove('in'); void el.offsetWidth; el.textContent = c; el.classList.add('in');
+  }
+  if (S.state === 'arrive' && now - S.since > 2.6) $('#endcard').classList.add('show');
+  if (S.state === 'arrive' && now - S.since > 6.6) window.__videoDone = true;
+}
+
+applyStatic(); setRoute('main'); goPlan(); setAuto(true);
+if (MODE === 'og'){ setAuto(false); startDrive(21.5); S.wekaFrozen = true; S.fired.wstop = 1; S.fired.rw = 1; S.fired.wgo = 1; for (let i = 0; i < 90; i++) tick(1 / 30); S.mem.weka = S.d * KM - 1.6; updateHud(true); window.__manualClock = true; toast({icon:'⏸️', title:'Member Stopped', body:'Weka has been stopped for 3 minutes', kind:'bad'}); }
+if (MODE !== 'og') Object.assign(camS, camT);
+requestAnimationFrame(frame);
+})();
+</script>
+<script src="/app.js" defer></script>
+</body>
+</html>
